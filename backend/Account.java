@@ -64,9 +64,14 @@ public class Account {
     }
 
     // send a friend request to other user (adding to current requestedFriends)
-    public void sendFriendRequest(Account user) {
-        requestedFriends.add(user);
-        user.friendRequests.add(this);
+    // ensure that they both are not already friends
+    public int sendFriendRequest(Account user) {
+        if (!isFriendsWith(user)) {
+            requestedFriends.add(user);
+            user.friendRequests.add(this);
+            return 1;
+        }
+        return -1;
     }
 
     // accept or decline a friend request in friendRequests
