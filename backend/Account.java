@@ -24,7 +24,7 @@ public class Account {
 
     // friends is the user's current friends
     private ArrayList<Account> friends;
-    // friendRequests is a list of friend requests that others have sent to this user
+    // friendRequests is a list of friend requests that others have sent to this use
     private ArrayList<Account> friendRequests;
     // friendRequests is a list of friend requests sent by this user
     private ArrayList<Account> requestedFriends;
@@ -57,4 +57,73 @@ public class Account {
     public ArrayList<Account> getFriends() { return friends; }
     public ArrayList<Account> getFriendRequests() { return friendRequests; }
     public ArrayList<Account> getRequestedFriends() { return requestedFriends; }
+
+    // checks whether or not a user is friends with this user
+    public boolean isFriendsWith(Account user) {
+        return userInList(user, friends) != -1;
+    }
+
+    // send a friend request to other user (adding to current requestedFriends)
+    public void sendFriendRequest(Account user) {
+        requestedFriends.add(user);
+        user.friendRequests.add(this);
+    }
+
+    // accept or decline a friend request in friendRequests
+    // if function successful, return 1. Else, return -1
+    public int acceptDeclineFriendRequest(Account user, boolean accepting) {
+        // check if we have the other user in our friend requests
+        int i = userInList(user, friendRequests);
+        // check if the other user has requested this user
+        int j = userInList(this, user.requestedFriends);
+        if (i != -1 && j != -1) {
+            // if this user is accepting friend request, add the users and remove from request lists
+            // else, if this user is declining, only remove from friend requests lists
+            if (accepting) {
+                friends.add(user);
+                user.friends.add(this);
+            }
+            friendRequests.remove(i);
+            user.requestedFriends.remove(j);
+            return 1;
+        }
+        return -1;
+    }
+
+    // remove a friend request that this user has made
+    public int cancelFriendRequest(Account user) {
+        int i = userInList(user, requestedFriends);
+        int j = userInList(this, friendRequests);
+        if (i != -1 && j != -1) {
+            requestedFriends.remove(i);
+            user.friendRequests.remove(j);
+            return 1;
+        }
+        return -1;
+    }
+
+    // "unfriend" and remove a friend from user's friends list
+    public int removeFriend(Account user) {
+        int i = userInList(user, friends);
+        int j = userInList(this, user.friends);
+        if (i != -1 && j != -1) {
+            friends.remove(i);
+            user.friends.remove(j);
+            return 1;
+        }
+        return -1;
+    }
+
+    // method to ease the finding of a user in a list
+    // for example, when we need to check if a user exists in our friends list
+    // if found, returns the index in list
+    // if not found, return -1
+    private int userInList(Account user, ArrayList<Account> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).username.equals(user.username)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
