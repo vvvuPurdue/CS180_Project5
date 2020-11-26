@@ -20,13 +20,24 @@ import backend.Account;
 public class Client { //TODO add connection to the server code, create friend and profile menus
 	private static String accountName;
 	private static String pass;
+	private static Account user;
 
-	public static void main(String[] args) throws UnknownHostException, IOException {
+	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 		
 		//find the server info so that the server host can be remote, or on a different port
 		String hostname = JOptionPane.showInputDialog(null, "Server Hostname", JOptionPane.QUESTION_MESSAGE);
 		int port = Integer.parseInt(JOptionPane.showInputDialog(null, "Server Port", JOptionPane.QUESTION_MESSAGE));
+		//connects to the server and shows confirmation
 		Socket socket = new Socket(hostname, port);
+		JOptionPane.showInternalMessageDialog(null, "Successfully connected to server", "Connection Established", JOptionPane.INFORMATION_MESSAGE);
+		
+		//establishes IO method with server
+		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter writer = new PrintWriter(socket.getOutputStream());
+        ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
+        
+        //creates server session
+        writer.print("createSession");
 		
 		boolean hasAccount = false;
 		//creates a login or account creation request to send to the server
@@ -41,6 +52,20 @@ public class Client { //TODO add connection to the server code, create friend an
 			
 			if (response.equals("Login")) {
 				//send account name and pass to login
+				writer.print("loginUser " + accountName + " " + pass);
+				String success = reader.readLine();
+				switch (success) {
+				case "Success":
+					hasAccount = true;
+					user = (Account) objectInput.readObject();
+					break;
+				case "usernameNotFound":
+					JOptionPane.showInternalMessageDialog(null, "Username does not exist", "User Error!", JOptionPane.ERROR_MESSAGE);
+					break;
+				case "incorrectPassword":
+					JOptionPane.showInternalMessageDialog(null, "Incorrect Password", "Password Error!", JOptionPane.ERROR_MESSAGE);
+				}
+				
 			
 			} else {
 				//send account name and pass and do account setup
@@ -51,6 +76,21 @@ public class Client { //TODO add connection to the server code, create friend an
 				//section to gain all other needed account info to create the Account
 				String bio = JOptionPane.showInputDialog(null, "Please enter your bio", JOptionPane.QUESTION_MESSAGE);
 				String interests = JOptionPane.showInputDialog(null, "Please enter some of your interests", JOptionPane.QUESTION_MESSAGE);
+				
+				writer.print("createAccount " + accountName + " " + pass + " " + email + " " + phone + " " + bio + " " + interests);
+				String result = reader.readLine();
+				switch (result) {
+				case "success":
+					JOptionPane.showInternalMessageDialog(null, "Successfully created account", "Account Created!", JOptionPane.INFORMATION_MESSAGE);
+					user = (Account) objectInput.readObject();
+					break;
+				case "usernameExists":
+					JOptionPane.showInternalMessageDialog(null, "Username already exists", "User Error!", JOptionPane.ERROR_MESSAGE);
+					break;
+				case "emptyFields":
+					JOptionPane.showInternalMessageDialog(null, "You must fill every field to create an account", "User Error!", JOptionPane.ERROR_MESSAGE);
+					break;
+				}
 				
 			}
 			
@@ -76,6 +116,10 @@ public class Client { //TODO add connection to the server code, create friend an
 				break;
 			case "Close Client":
 				//close all client resources here
+				writer.print("closeSession");
+				writer.close();
+				reader.close();
+				objectInput.close();
 				socket.close();
 				return;
 			} 
