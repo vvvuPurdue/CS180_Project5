@@ -66,6 +66,12 @@ public class Account implements Serializable {
         return userInList(user.username, friends) != -1;
     }
 
+    public boolean hasRequested(Account user) {
+        int i = userInList(user.username, this.requestedFriends);
+        int j = userInList(this.username, user.friendRequests);
+        return i != -1 && j != -1;
+    }
+
     // send a friend request to other user (adding to current requestedFriends)
     // ensure that they both are not already friends
     public int sendFriendRequest(Account user) {
