@@ -153,12 +153,21 @@ public class Client { //TODO create friend and profile menus, establish all serv
 	//method to open a window with the friend menu
 	public static void friendMenu() {
 		JFrame friendFrame = new JFrame();
+		//hasRequested goes here
+		//isFriendsWith goes here?
+		//sendFriendRequest goes here
+		//cancelFriendRequest goes here
+		//acceptFriendRequest goes here
+		//declineFriendRequest goes here
+		//removeFriend goes here
+		//getuser goes here
 	}
 	
 	
 	//method to open a window with the profile menu
 	public static void profileMenu() {
 		JFrame profileFrame = new JFrame();
+		//updateAccount goes here
 	}
 	
 	public static void closeClient() throws IOException {
