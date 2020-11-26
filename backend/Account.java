@@ -1,3 +1,6 @@
+package backend;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +14,7 @@ import java.util.ArrayList;
     * @version November 23, 2020
 */
 
-public class Account {
+public class Account implements Serializable {
     
     // account info
     private String username;

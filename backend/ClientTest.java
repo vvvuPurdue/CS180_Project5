@@ -1,7 +1,8 @@
+package backend;
+
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
-
 /**
     * Client testing
     *
@@ -14,21 +15,31 @@ import java.util.Scanner;
 
 public class ClientTest {
     
-    public static void main(String[] args) throws UnknownHostException, IOException {
+    public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
         Socket socket = new Socket("localhost", 4242);
         System.out.println("Connected to server!");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter writer = new PrintWriter(socket.getOutputStream());
+        ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
 
         Scanner scan = new Scanner(System.in);
         String message;
+        String response;
         do {
             System.out.print("Send message to server: ");
             message = scan.nextLine();
             writer.write(message);
             writer.println();
             writer.flush();
+
+            response = reader.readLine();
+            if (response.equals("good")) {
+                Account user = (Account) objectInput.readObject();
+                System.out.println(user.getUsername());
+            } else {
+                System.out.println(response);
+            }
         } while (!message.equals("close server"));
 
         socket.close();

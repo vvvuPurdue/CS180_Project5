@@ -8,7 +8,6 @@
     *
     * @author First Last, CS 180 - Merge
     * @version November 23, 2020
-    *
 */
 
 public class Example {

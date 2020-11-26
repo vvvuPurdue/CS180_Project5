@@ -1,3 +1,7 @@
+package backend;
+
+import java.io.Serializable;
+
 /**
     * Contact Info class
     *
@@ -8,7 +12,7 @@
     * @version November 23, 2020
 */
 
-public class ContactInfo {
+public class ContactInfo implements Serializable {
     private String email;
     private String phoneNumber;
 

@@ -1,3 +1,5 @@
+package backend;
+
 import java.io.*;
 import java.net.*;
 
@@ -20,11 +22,26 @@ public class Server {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter writer = new PrintWriter(socket.getOutputStream());
+        ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
+
+        Account bob = new Account("bob123", "password", "bob@email", "123", "a cool guy", "pizza, soccer, and sleeping");
 
         String message = "";
         do {
             message = reader.readLine();
             System.out.println("Received from client: " + message);
+            
+            if (message.equals("getUser")) {
+                writer.write("good");
+                writer.println();
+                writer.flush();
+                objectOutput.writeObject(bob);
+                // objectOutput.flush();
+            } else {
+                writer.write("bad");
+                writer.println();
+                writer.flush();
+            }
         } while (!message.equals("close server"));
 
         serverSocket.close();
