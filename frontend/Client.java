@@ -21,6 +21,8 @@ public class Client { //TODO add connection to the server code, create friend an
 	private static String accountName;
 	private static String pass;
 	private static Account user;
+	public static final String[] createSession = {"createSession"};
+	public static final String[] closeSession = {"closeSession"};
 
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 		
@@ -35,9 +37,10 @@ public class Client { //TODO add connection to the server code, create friend an
 		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter writer = new PrintWriter(socket.getOutputStream());
         ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
+        ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
         
         //creates server session
-        writer.print("createSession");
+        objectOut.writeObject(createSession);
 		
 		boolean hasAccount = false;
 		//creates a login or account creation request to send to the server
@@ -52,7 +55,8 @@ public class Client { //TODO add connection to the server code, create friend an
 			
 			if (response.equals("Login")) {
 				//send account name and pass to login
-				writer.print("loginUser " + accountName + " " + pass);
+				String[] accountInfo = {"loginUser", accountName, pass};
+				objectOut.writeObject(accountInfo);
 				String success = reader.readLine();
 				switch (success) {
 				case "Success":
@@ -77,12 +81,14 @@ public class Client { //TODO add connection to the server code, create friend an
 				String bio = JOptionPane.showInputDialog(null, "Please enter your bio", JOptionPane.QUESTION_MESSAGE);
 				String interests = JOptionPane.showInputDialog(null, "Please enter some of your interests", JOptionPane.QUESTION_MESSAGE);
 				
-				writer.print("createAccount " + accountName + " " + pass + " " + email + " " + phone + " " + bio + " " + interests);
+				String[] accountParams = {"createAccount", accountName, pass, email, phone, bio, interests};
+				objectOut.writeObject(accountParams);
 				String result = reader.readLine();
 				switch (result) {
 				case "success":
 					JOptionPane.showInternalMessageDialog(null, "Successfully created account", "Account Created!", JOptionPane.INFORMATION_MESSAGE);
 					user = (Account) objectInput.readObject();
+					hasAccount = true;
 					break;
 				case "usernameExists":
 					JOptionPane.showInternalMessageDialog(null, "Username already exists", "User Error!", JOptionPane.ERROR_MESSAGE);
@@ -116,10 +122,12 @@ public class Client { //TODO add connection to the server code, create friend an
 				break;
 			case "Close Client":
 				//close all client resources here
-				writer.print("closeSession");
+				
+				objectOut.writeObject(closeSession);
 				writer.close();
 				reader.close();
 				objectInput.close();
+				objectOut.close();
 				socket.close();
 				return;
 			} 
@@ -138,6 +146,10 @@ public class Client { //TODO add connection to the server code, create friend an
 	//method to open a window with the profile menu
 	public static void profileMenu() {
 		JFrame profileFrame = new JFrame();
+	}
+	
+	public static void deleteAccount() {
+		
 	}
 	
 
