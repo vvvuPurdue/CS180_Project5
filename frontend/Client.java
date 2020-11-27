@@ -32,14 +32,17 @@ public class Client { //TODO create friend and profile menus, establish all serv
 	public static PrintWriter writer;
 	public static ObjectInputStream objectInput;
 	public static ObjectOutputStream objectOut;
+	
+	public static String serverHost;
+	public static int serverPort;
 
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 		
 		//find the server info so that the server host can be remote, or on a different port
-		String hostname = JOptionPane.showInputDialog(null, "Server Hostname", JOptionPane.QUESTION_MESSAGE);
-		int port = Integer.parseInt(JOptionPane.showInputDialog(null, "Server Port", JOptionPane.QUESTION_MESSAGE));
+		serverHost = JOptionPane.showInputDialog(null, "Server Hostname", JOptionPane.QUESTION_MESSAGE);
+		serverPort = Integer.parseInt(JOptionPane.showInputDialog(null, "Server Port", JOptionPane.QUESTION_MESSAGE));
 		//connects to the server and shows confirmation
-		socket = new Socket(hostname, port);
+		socket = new Socket(serverHost, serverPort);
 		JOptionPane.showInternalMessageDialog(null, "Successfully connected to server", "Connection Established", JOptionPane.INFORMATION_MESSAGE);
 		
 		//establishes IO method with server
@@ -64,48 +67,12 @@ public class Client { //TODO create friend and profile menus, establish all serv
 			
 			if (response.equals("Login")) {
 				//send account name and pass to login
-				String[] accountInfo = {"loginUser", accountName, pass};
-				objectOut.writeObject(accountInfo);
-				String success = reader.readLine();
-				switch (success) {
-				case "Success":
-					hasAccount = true;
-					user = (Account) objectInput.readObject();
-					break;
-				case "usernameNotFound":
-					JOptionPane.showInternalMessageDialog(null, "Username does not exist", "User Error!", JOptionPane.ERROR_MESSAGE);
-					break;
-				case "incorrectPassword":
-					JOptionPane.showInternalMessageDialog(null, "Incorrect Password", "Password Error!", JOptionPane.ERROR_MESSAGE);
-				}
+				hasAccount = loginUser();
 				
 			
 			} else {
 				//send account name and pass and do account setup
-				//section for contact info
-				String email = JOptionPane.showInputDialog(null, "Please enter your email", JOptionPane.QUESTION_MESSAGE);
-				String phone = JOptionPane.showInputDialog(null, "Please enter your phone number", JOptionPane.QUESTION_MESSAGE);
-				
-				//section to gain all other needed account info to create the Account
-				String bio = JOptionPane.showInputDialog(null, "Please enter your bio", JOptionPane.QUESTION_MESSAGE);
-				String interests = JOptionPane.showInputDialog(null, "Please enter some of your interests", JOptionPane.QUESTION_MESSAGE);
-				
-				String[] accountParams = {"createAccount", accountName, pass, email, phone, bio, interests};
-				objectOut.writeObject(accountParams);
-				String result = reader.readLine();
-				switch (result) {
-				case "success":
-					JOptionPane.showInternalMessageDialog(null, "Successfully created account", "Account Created!", JOptionPane.INFORMATION_MESSAGE);
-					user = (Account) objectInput.readObject();
-					hasAccount = true;
-					break;
-				case "usernameExists":
-					JOptionPane.showInternalMessageDialog(null, "Username already exists", "User Error!", JOptionPane.ERROR_MESSAGE);
-					break;
-				case "emptyFields":
-					JOptionPane.showInternalMessageDialog(null, "You must fill every field to create an account", "User Error!", JOptionPane.ERROR_MESSAGE);
-					break;
-				}
+				hasAccount = createUser();
 				
 			}
 			
@@ -131,11 +98,7 @@ public class Client { //TODO create friend and profile menus, establish all serv
 				profileMenu();
 				break;
 			case "Delete Account":
-				int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete your account?", "Confirmation Required", JOptionPane.YES_NO_OPTION);
-				if (confirmation == JOptionPane.YES_OPTION) {
-					String[] deleteAccount = {"deleteAccount", accountName, pass};
-					objectOut.writeObject(deleteAccount);
-					closeClient();
+				if(deleteAccount()) {
 					return;
 				}
 			case "Close Client":
@@ -170,6 +133,54 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		//updateAccount method implemented
 	}
 	
+	public static boolean loginUser() throws IOException, ClassNotFoundException {
+		boolean hasAccount = false;
+		String[] accountInfo = {"loginUser", accountName, pass};
+		objectOut.writeObject(accountInfo);
+		String success = reader.readLine();
+		switch (success) {
+		case "Success":
+			hasAccount = true;
+			user = (Account) objectInput.readObject();
+			break;
+		case "usernameNotFound":
+			JOptionPane.showInternalMessageDialog(null, "Username does not exist", "User Error!", JOptionPane.ERROR_MESSAGE);
+			break;
+		case "incorrectPassword":
+			JOptionPane.showInternalMessageDialog(null, "Incorrect Password", "Password Error!", JOptionPane.ERROR_MESSAGE);
+		}
+		return hasAccount;
+	}
+	
+	public static boolean createUser() throws ClassNotFoundException, IOException {
+		boolean hasAccount = false;
+		//section for contact info
+		String email = JOptionPane.showInputDialog(null, "Please enter your email", JOptionPane.QUESTION_MESSAGE);
+		String phone = JOptionPane.showInputDialog(null, "Please enter your phone number", JOptionPane.QUESTION_MESSAGE);
+		
+		//section to gain all other needed account info to create the Account
+		String bio = JOptionPane.showInputDialog(null, "Please enter your bio", JOptionPane.QUESTION_MESSAGE);
+		String interests = JOptionPane.showInputDialog(null, "Please enter some of your interests", JOptionPane.QUESTION_MESSAGE);
+		
+		String[] accountParams = {"createAccount", accountName, pass, email, phone, bio, interests};
+		objectOut.writeObject(accountParams);
+		String result = reader.readLine();
+		switch (result) {
+		case "success":
+			JOptionPane.showInternalMessageDialog(null, "Successfully created account", "Account Created!", JOptionPane.INFORMATION_MESSAGE);
+			user = (Account) objectInput.readObject();
+			hasAccount = true;
+			break;
+		case "usernameExists":
+			JOptionPane.showInternalMessageDialog(null, "Username already exists", "User Error!", JOptionPane.ERROR_MESSAGE);
+			break;
+		case "emptyFields":
+			JOptionPane.showInternalMessageDialog(null, "You must fill every field to create an account", "User Error!", JOptionPane.ERROR_MESSAGE);
+			break;
+		}
+		return hasAccount;
+	}
+	
 	public static void closeClient() throws IOException {
 		objectOut.writeObject(closeSession);
 		writer.close();
@@ -177,6 +188,17 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		objectInput.close();
 		objectOut.close();
 		socket.close();
+	}
+	
+	public static boolean deleteAccount() throws IOException {
+		int confirmation = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete your account?", "Confirmation Required", JOptionPane.YES_NO_OPTION);
+		if (confirmation == JOptionPane.YES_OPTION) {
+			String[] deleteAccount = {"deleteAccount", accountName, pass};
+			objectOut.writeObject(deleteAccount);
+			closeClient();
+			return true;
+		}
+		return false;
 	}
 	
 	public static void updateAccount(String email, String phoneNo, String bio, String interests) throws IOException, ClassNotFoundException {
@@ -381,6 +403,25 @@ public class Client { //TODO create friend and profile menus, establish all serv
 			break;
 		}
 		return false;
+	}
+	
+	public static void connectServer() throws UnknownHostException, IOException {
+		
+		socket = new Socket(serverHost, serverPort);
+		
+		//establishes IO method with server
+		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        writer = new PrintWriter(socket.getOutputStream());
+        objectInput = new ObjectInputStream(socket.getInputStream());
+        objectOut = new ObjectOutputStream(socket.getOutputStream());
+	}
+	
+	public static void disconnectServer() throws IOException {
+		socket.close();
+		reader.close();
+		writer.close();
+		objectInput.close();
+		objectOut.close();
 	}
 	
 
