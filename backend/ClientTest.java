@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class ClientTest {
     
     public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
-        Socket socket = new Socket("localhost", 4444);
+        Socket socket = new Socket("localhost", 4242);
         System.out.println("Connected to server!");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
