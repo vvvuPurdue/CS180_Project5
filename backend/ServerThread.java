@@ -4,15 +4,16 @@ import java.io.*;
 import java.net.*;
 
 /**
-    * Session
+    * SesrverThread
     *
     * A server thread. Handles requests, and authentication
+    * Used to avoid overloading the server
     * 
     * @author Team 15-3, CS 180 - Merge
     * @version November 23, 2020
 */
 
-public class Session extends Thread {
+public class ServerThread extends Thread {
 
     private Socket socket;
     private Manager manager;
@@ -23,7 +24,7 @@ public class Session extends Thread {
 
     // When we instantiating t1he thread, use the server socket
     // and the database manager (static) assigned to us
-    public Session(Socket clientSocket, Manager manager) {
+    public ServerThread(Socket clientSocket, Manager manager) {
         this.socket = clientSocket;
         this.manager = manager;
     }

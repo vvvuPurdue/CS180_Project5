@@ -32,7 +32,7 @@ public class Server {
             // client connection
             Socket socket = serverSocket.accept();
             System.out.println("Client connected!");
-            new Session(socket, manager);
+            new ServerThread(socket, manager);
         }
     }
 }
