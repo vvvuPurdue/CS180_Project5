@@ -72,7 +72,7 @@ public class Client { //TODO create friend and profile menus, establish all serv
 			
 			} else {
 				//send account name and pass and do account setup
-				hasAccount = createUser();
+				hasAccount = createAccount();
 				
 			}
 			
@@ -165,7 +165,7 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		return hasAccount;
 	}
 	
-	public static boolean createUser() throws ClassNotFoundException, IOException {
+	public static boolean createAccount() throws ClassNotFoundException, IOException {
 		connectServer();
 		boolean hasAccount = false;
 		//section for contact info
