@@ -88,6 +88,7 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		
 		//base menu for client, when running the client is still running
 		//once the Close option is chosen, the client closes all resources and terminates
+		//the Delete Account option also calls the close option if the account is succesfully deleted
 		String[] menus = {"Friends", "Profile", "Close Client", "Delete Account"};
 		
 		
@@ -137,20 +138,26 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		//updateAccount method implemented
 	}
 	
+	//method to log in an already existing user
 	public static boolean loginUser() throws IOException, ClassNotFoundException {
 		connectServer();
 		boolean hasAccount = false;
+		//creates an array to send to server as the request
 		String[] accountInfo = {"loginUser", accountName, pass};
 		objectOut.writeObject(accountInfo);
+		//reads the status code and responds according to success or the error code
 		String success = reader.readLine();
 		switch (success) {
-		case "Success":
+		//success code, initializes the user account
+		case "loginSuccessful":
 			hasAccount = true;
 			user = (Account) objectInput.readObject();
 			break;
+		//error code for an invalid username, displays error, then returns to login loop
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username does not exist", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+			//error code for an invalid password, displays error, then returns to login loop
 		case "incorrectPassword":
 			JOptionPane.showInternalMessageDialog(null, "Incorrect Password", "Password Error!", JOptionPane.ERROR_MESSAGE);
 		}
@@ -171,16 +178,20 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		
 		String[] accountParams = {"createAccount", accountName, pass, email, phone, bio, interests};
 		objectOut.writeObject(accountParams);
+		//reads the status code and responds according to success or the error code
 		String result = reader.readLine();
 		switch (result) {
+		//success code, initializes user
 		case "success":
 			JOptionPane.showInternalMessageDialog(null, "Successfully created account", "Account Created!", JOptionPane.INFORMATION_MESSAGE);
 			user = (Account) objectInput.readObject();
 			hasAccount = true;
 			break;
+		//error for a username already existing, returns to account initialization loop
 		case "usernameExists":
 			JOptionPane.showInternalMessageDialog(null, "Username already exists", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error for empty fields in account info, returns to account initialization loop
 		case "emptyFields":
 			JOptionPane.showInternalMessageDialog(null, "You must fill every field to create an account", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
@@ -193,23 +204,30 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		connectServer();
 		String[] updateString = {"updateAccount", accountName, email, phoneNo, bio, interests};
 		objectOut.writeObject(updateString);
+		//reads the status code and responds according to success or the error code
 		String code = reader.readLine();
 		switch (code) {
+		//success code, updates the Client account
 		case "success":
 			user = (Account) objectInput.readObject();
 			break;
+		//error for a username that could not be found, Client account is not updated
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username could not be found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error for an incorrect password, Client account is not updated
 		case "incorrectPassword":
 			JOptionPane.showInternalMessageDialog(null, "Password was not correct!", "Password Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error for attempting to change to a username that already exists, Client account is not updated
 		case "usernameExists":
 			JOptionPane.showInternalMessageDialog(null, "Username already exists!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error for attempting to use an invalid username, Client account is not updated
 		case "invalidUsername":
 			JOptionPane.showInternalMessageDialog(null, "Username is invalid!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error for including empty account information fields, Client account is not updated
 		case "emptyFields":
 			JOptionPane.showInternalMessageDialog(null, "Account information cannot be empty!", "Account Error!", JOptionPane.ERROR_MESSAGE);
 			break;
@@ -221,23 +239,30 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		connectServer();
 		String[] updateString = {"updateAccount", accountName, email, phoneNo, bio, interests, newUsername, newPassword};
 		objectOut.writeObject(updateString);
+		//reads the status code and responds according to success or the error code
 		String code = reader.readLine();
 		switch (code) {
+		//success code, updates the Client account
 		case "success":
 			user = (Account) objectInput.readObject();
 			break;
+		//error for a username that could not be found, Client account is not updated
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username could not be found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error for an incorrect password, Client account is not updated
 		case "incorrectPassword":
 			JOptionPane.showInternalMessageDialog(null, "Password was not correct!", "Password Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error for attempting to change to a username that already exists, Client account is not updated
 		case "usernameExists":
 			JOptionPane.showInternalMessageDialog(null, "Username already exists!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error for attempting to use an invalid username, Client account is not updated
 		case "invalidUsername":
 			JOptionPane.showInternalMessageDialog(null, "Username is invalid!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error for including empty account information fields, Client account is not updated
 		case "emptyFields":
 			JOptionPane.showInternalMessageDialog(null, "Account information cannot be empty!", "Account Error!", JOptionPane.ERROR_MESSAGE);
 			break;
@@ -249,18 +274,23 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		connectServer();
 		String[] isFriends = {"isFriendsWith", username, username2};
 		objectOut.writeObject(isFriends);
+		//reads the status code and responds according to success or the error code
 		String code = reader.readLine();
 		switch (code) {
+		//success code, returns if two Accounts are friends
 		case "success":
 			boolean isFriend = objectInput.readBoolean();
 			disconnectServer();
 			return isFriend;
+		//error code for an invalid user, returns that Accounts are not friends as at least one is invalid
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + username + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for an invalid user, returns that Accounts are not friends as at least one is invalid
 		case "username2NotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + username2 + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for an invalid user, returns that Accounts are not friends as at least one is invalid
 		case "emptyFields":
 			JOptionPane.showInternalMessageDialog(null, "Fields are empty!", "Input Error!", JOptionPane.ERROR_MESSAGE);
 			break;
@@ -273,17 +303,22 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		connectServer();
 		String[] friendRequest = {"sendFriendRequest", accountName, username};
 		objectOut.writeObject(friendRequest);
+		//reads the status code and responds according to success or the error code
 		String code = reader.readLine();
 		switch (code) {
+		//success code, updates Account with updated friend requests
 		case "success":
 			user = (Account) objectInput.readObject();
 			break;
+		//error code for an invalid username, Account is not updated
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + accountName + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for an invalid username, Account is not updated
 		case "username2NotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + username + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for empty fields, Account is not updated
 		case "emptyFields":
 			JOptionPane.showInternalMessageDialog(null, "Friend request cannot be empty!", "Input Error!", JOptionPane.ERROR_MESSAGE);
 		}
@@ -295,17 +330,22 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		connectServer();
 		String[] friendRequest = {"cancelFriendRequest", accountName, username};
 		objectOut.writeObject(friendRequest);
+		//reads the status code and responds according to success or the error code
 		String code = reader.readLine();
 		switch (code) {
+		//success code, updates Account with updated friend requests
 		case "success":
 			user = (Account) objectInput.readObject();
 			break;
+		//error code for an invalid username, Account is not updated
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + accountName + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for an invalid username, Account is not updated
 		case "username2NotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + username + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for empty fields, Account is not updated
 		case "emptyFields":
 			JOptionPane.showInternalMessageDialog(null, "Friend request to cancel cannot be empty!", "Input Error!", JOptionPane.ERROR_MESSAGE);
 		}
@@ -316,17 +356,22 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		connectServer();
 		String[] friendRequest = {"acceptFriendRequest", accountName, username};
 		objectOut.writeObject(friendRequest);
+		//reads the status code and responds according to success or the error code
 		String code = reader.readLine();
 		switch (code) {
+		//success code, updates Account with updated friends list
 		case "success":
 			user = (Account) objectInput.readObject();
 			break;
+		//error code for an invalid username, Account is not updated
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + accountName + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for an invalid username, Account is not updated
 		case "username2NotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + username + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for empty fields, Account is not updated
 		case "emptyFields":
 			JOptionPane.showInternalMessageDialog(null, "Friend to accept must not be empty!", "Input Error!", JOptionPane.ERROR_MESSAGE);
 		}
@@ -337,17 +382,22 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		connectServer();
 		String[] friendRequest = {"declineFriendRequest", accountName, username};
 		objectOut.writeObject(friendRequest);
+		//reads the status code and responds according to success or the error code
 		String code = reader.readLine();
 		switch (code) {
+		//success code, updates Account with updated friend requests
 		case "success":
 			user = (Account) objectInput.readObject();
 			break;
+		//error code for an invalid username, Account is not updated
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + accountName + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for an invalid username, Account is not updated
 		case "username2NotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + username + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for empty fiels, Account is not updated
 		case "emptyFields":
 			JOptionPane.showInternalMessageDialog(null, "Friend to deny must not be empty!", "Input Error!", JOptionPane.ERROR_MESSAGE);
 		}
@@ -358,17 +408,22 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		connectServer();
 		String[] friendRequest = {"removeFriend", accountName, username};
 		objectOut.writeObject(friendRequest);
+		//reads the status code and responds according to success or the error code
 		String code = reader.readLine();
 		switch (code) {
+		//success code, updates Account with updated friends list
 		case "success":
 			user = (Account) objectInput.readObject();
 			break;
+		//error code for an invalid username, Account is not updated
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + accountName + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for an invalid username, Account is not updated
 		case "username2NotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + username + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for empty fiels, Account is not updated
 		case "emptyFields":
 			JOptionPane.showInternalMessageDialog(null, "Friend to remove must not be empty!", "Input Error!", JOptionPane.ERROR_MESSAGE);
 		}
@@ -379,11 +434,14 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		connectServer();
 		String[] request = {"getUser", username};
 		objectOut.writeObject(request);
+		//reads the status code and responds according to success or the error code
 		String code = reader.readLine();
 		switch (code) {
+		//success code, returns the requested user Account
 		case "success":
 			disconnectServer();
 			return (Account) objectInput.readObject();
+		//error for a user that could not be found, returns null
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + username + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			disconnectServer();
@@ -397,18 +455,23 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		connectServer();
 		String[] request = {"hasRequested", username, username2};
 		objectOut.writeObject(request);
+		//reads the status code and responds according to success or the error code
 		String code = reader.readLine();
 		switch (code) {
+		//success code, returns if the first user has requested the second user
 		case "success":
 			boolean hasRequest = objectInput.readBoolean();
 			disconnectServer();
 			return hasRequest;
+		//error code for a requesting user which could not be found, returns false
 		case "usernameNotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + username + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for a requested user which could not be found, returns false
 		case "username2NotFound":
 			JOptionPane.showInternalMessageDialog(null, "Username " + username2 + " is not found!", "User Error!", JOptionPane.ERROR_MESSAGE);
 			break;
+		//error code for sending an empty field, returns false
 		case "emptyFields":
 			JOptionPane.showInternalMessageDialog(null, "Usernames must not be empty!", "Input Error!", JOptionPane.ERROR_MESSAGE);
 			break;
