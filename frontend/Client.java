@@ -53,6 +53,8 @@ public class Client { //TODO create friend and profile menus, establish all serv
         
         //creates server session
         objectOut.writeObject(createSession);
+        String sessionCode = reader.readLine();
+        System.out.println(sessionCode);
 		
 		boolean hasAccount = false;
 		//creates a login or account creation request to send to the server
@@ -91,8 +93,9 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		//the Delete Account option also calls the close option if the account is succesfully deleted
 		String[] menus = {"Friends", "Profile", "Close Client", "Delete Account"};
 		
-		
+		int counter = 0;
 		do {
+			counter++;
 			String menuChoice = (String) JOptionPane.showInputDialog(null, "Home", "", JOptionPane.QUESTION_MESSAGE, null, menus,
 				menus[0]);
 			switch(menuChoice) {
@@ -111,7 +114,12 @@ public class Client { //TODO create friend and profile menus, establish all serv
 				
 				closeClient();
 				return;
-			} 
+			}
+			
+			if(counter > 10000) {
+				counter = 0;
+				update();
+			}
 		
 		} while(true);
 
@@ -121,6 +129,14 @@ public class Client { //TODO create friend and profile menus, establish all serv
 	//method to open a window with the friend menu
 	public static void friendMenu() {
 		JFrame friendFrame = new JFrame();
+		boolean menuOpen = true;
+		int counter = 0;
+		do {
+			counter++;
+			if (counter > 10000) {
+				//update whatever is being viewed here
+			}
+		} while(menuOpen);
 		//hasRequested method implemented
 		//isFriendsWith method implemented
 		//sendFriendRequest method implemented
@@ -133,8 +149,16 @@ public class Client { //TODO create friend and profile menus, establish all serv
 	
 	
 	//method to open a window with the profile menu
-	public static void profileMenu() {
+	public static void profileMenu() throws ClassNotFoundException, IOException {
 		JFrame profileFrame = new JFrame();
+		boolean menuOpen = true;
+		int counter = 0;
+		do {
+			counter++;
+			if (counter > 10000) {
+				update();
+			}
+		} while(menuOpen);
 		//updateAccount method implemented
 	}
 	
@@ -519,6 +543,10 @@ public class Client { //TODO create friend and profile menus, establish all serv
 		}
 		disconnectServer();
 		return false;
+	}
+	
+	public static void update() throws ClassNotFoundException, IOException {
+		getUser(accountName);
 	}
 	
 
