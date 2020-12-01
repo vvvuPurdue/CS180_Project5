@@ -439,7 +439,7 @@ public class RunLocalTest {
         @Test(timeout = 1000)
         public void accountGetUsernameMethodTest() {
             Class<?> clazz;
-            String className = "ContactInfo";
+            String className = "Account";
             Method method;
             int modifiers;
             Class<?> actualReturnType;
@@ -488,8 +488,9 @@ public class RunLocalTest {
 
             String methodName = "getUsername";
             String className = "Account";
+            String testInput = "username";
 
-            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns the username!", "username", acc.getUsername());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns the username!", testInput, acc.getUsername());
         }
 
         @Test(timeout = 1000)
@@ -497,8 +498,9 @@ public class RunLocalTest {
             Account acc = new Account(null, "password", "email@email.com", "1234567890",
                     "bio", "interests");
 
-            String methodName = "getPassword";
+            String methodName = "getUsername";
             String className = "Account";
+            String testInput = null;
 
             Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method returns the username!", acc.getUsername());
         }
@@ -506,7 +508,7 @@ public class RunLocalTest {
         @Test(timeout = 1000)
         public void accountGetPasswordMethodTest() {
             Class<?> clazz;
-            String className = "ContactInfo";
+            String className = "Account";
             Method method;
             int modifiers;
             Class<?> actualReturnType;
@@ -555,8 +557,9 @@ public class RunLocalTest {
 
             String methodName = "getPassword";
             String className = "Account";
+            String testInput = "password";
 
-            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns the password!", "password", acc.getPassword());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns the password!", testInput, acc.getPassword());
         }
 
         @Test(timeout = 1000)
@@ -566,6 +569,7 @@ public class RunLocalTest {
 
             String methodName = "getPassword";
             String className = "Account";
+            String testInput = null;
 
             Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method returns the password!", acc.getPassword());
         }
@@ -573,7 +577,7 @@ public class RunLocalTest {
         @Test(timeout = 1000)
         public void accountSetUsernameMethodTest() {
             Class<?> clazz;
-            String className = "ContactInfo";
+            String className = "Account";
             Method method;
             int modifiers;
             Class<?> actualReturnType;
@@ -615,9 +619,37 @@ public class RunLocalTest {
         }
 
         @Test(timeout = 1000)
+        public void accountSetUsernameFunctionTest01() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setUsername";
+            String className = "Account";
+            String testInput = "username2";
+
+            acc.setUsername(testInput);
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the username correctly!", testInput, acc.getUsername());
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetUsernameFunctionTest02() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setUsername";
+            String className = "Account";
+            String testInput = null;
+
+            acc.setUsername(testInput);
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method sets the username correctly!", acc.getUsername());
+        }
+
+        @Test(timeout = 1000)
         public void accountSetPasswordMethodTest() {
             Class<?> clazz;
-            String className = "ContactInfo";
+            String className = "Account";
             Method method;
             int modifiers;
             Class<?> actualReturnType;
@@ -657,6 +689,1058 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
+
+        @Test(timeout = 1000)
+        public void accountSetPasswordFunctionTest01() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setPassword";
+            String className = "Account";
+            String testInput = "password2";
+
+            acc.setPassword(testInput);
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the password correctly!", testInput, acc.getPassword());
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetPasswordFunctionTest02() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setPassword";
+            String className = "Account";
+            String testInput = null;
+
+            acc.setPassword(testInput);
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method sets the password correctly!", acc.getPassword());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetEmailMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "getEmail";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = String.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has no parameters!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetEmailFunctionTest01() {
+            Account acc = new Account("username", "password", "email2@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "getEmail";
+            String className = "Account";
+            String testInput = "email2@email.com";
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns the email!", testInput, acc.getEmail());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetEmailFunctionTest02() {
+            Account acc = new Account("username", "password", null, "1234567890",
+                    "bio", "interests");
+
+            String methodName = "getEmail";
+            String className = "Account";
+            String testInput = null;
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method returns the email!", acc.getEmail());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetPhoneNumberMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "getPhoneNumber";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = String.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has no parameters!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetPhoneNumberFunctionTest01() {
+            Account acc = new Account("username", "password", "email@email.com", "1111111111",
+                    "bio", "interests");
+
+            String methodName = "getPhoneNumber";
+            String className = "Account";
+            String testInput = "1111111111";
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns the phone number!", testInput, acc.getPhoneNumber());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetPhoneNumberFunctionTest02() {
+            Account acc = new Account("username", "password", "email@email.com", null,
+                    "bio", "interests");
+
+            String methodName = "getPhoneNumber";
+            String className = "Account";
+            String testInput = null;
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method returns the phone number!", acc.getPhoneNumber());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetBioMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "getBio";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = String.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has no parameters!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetBioFunctionTest01() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio1", "interests");
+
+            String methodName = "getBio";
+            String className = "Account";
+            String testInput = "bio1";
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns the bio!", testInput, acc.getBio());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetBioFunctionTest02() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    null, "interests");
+
+            String methodName = "getBio";
+            String className = "Account";
+            String testInput = null;
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method returns the bio!", acc.getBio());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetInterestsMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "getInterests";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = String.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has no parameters!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetInterestsFunctionTest01() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests1");
+
+            String methodName = "getInterests";
+            String className = "Account";
+            String testInput = "interests1";
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns the interests!", testInput, acc.getInterests());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetInterestsFunctionTest02() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", null);
+
+            String methodName = "getInterests";
+            String className = "Account";
+            String testInput = null;
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method returns the interests!", acc.getInterests());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetFriendsMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "getFriends";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = ArrayList.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has no parameters!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetFriendsFunctionTest01() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertEquals("Ensure that `Account's` getFriends method returns an empty list before adding friends!", new ArrayList<Account>(), acc1.getFriends());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetFriendsFunctionTest02() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            acc1.sendFriendRequest(acc2);
+            acc2.acceptDeclineFriendRequest(acc1, true);
+
+            ArrayList<Account> testList1 = new ArrayList<>();
+            ArrayList<Account> testList2 = new ArrayList<>();
+            testList1.add(acc2);
+            testList2.add(acc1);
+
+            Assert.assertEquals("Ensure that `Account's` getFriends method returns the list of friends!", testList1, acc1.getFriends());
+            Assert.assertEquals("Ensure that `Account's` getFriends method returns the list of friends!", testList2, acc2.getFriends());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetFriendRequestsMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "getFriendRequests";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = ArrayList.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has no parameters!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetFriendRequestsFunctionTest01() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertEquals("Ensure that `Account's` `getFriendRequests` method returns an empty list before receiving friend requests!", new ArrayList<Account>(), acc1.getFriendRequests());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetFriendRequestsFunctionTest02() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            ArrayList<Account> testList1 = new ArrayList<>();
+            ArrayList<Account> testList2 = new ArrayList<>();
+            testList1.add(acc2);
+            testList2.add(acc1);
+
+            acc2.sendFriendRequest(acc1);
+
+            Assert.assertEquals("Ensure that `Account's` `getFriendRequests` method returns the list of friend requests!", testList1, acc1.getFriendRequests());
+
+            acc1.acceptDeclineFriendRequest(acc2, false);
+
+            Assert.assertEquals("Ensure that `Account's` `getFriendRequests` method returns the list of friend requests even after accepting or declining!", new ArrayList<Account>(), acc1.getFriendRequests());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetRequestedFriendsMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "getRequestedFriends";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = ArrayList.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has no parameters!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetRequestedFriendsFunctionTest01() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertEquals("Ensure that `Account's` `getRequestedFriends` method returns an empty list before sending friend requests!", new ArrayList<Account>(), acc1.getRequestedFriends());
+            Assert.assertEquals("Ensure that `Account's` `getRequestedFriends` method returns an empty list before sending friend requests!", new ArrayList<Account>(), acc2.getRequestedFriends());
+        }
+
+        @Test(timeout = 1000)
+        public void accountGetRequestedFriendsFunctionTest02() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            ArrayList<Account> testList1 = new ArrayList<>();
+            ArrayList<Account> testList2 = new ArrayList<>();
+            testList1.add(acc2);
+            testList2.add(acc1);
+
+            acc1.sendFriendRequest(acc2);
+
+            Assert.assertEquals("Ensure that `Account's` `getRequestedFriends` method returns the list of requested friends!", testList1, acc1.getRequestedFriends());
+
+            acc2.acceptDeclineFriendRequest(acc1, false);
+
+            Assert.assertEquals("Ensure that `Account's` `getRequestedFriends` method returns the list of friend requests even after accepting or declining!", new ArrayList<Account>(), acc1.getRequestedFriends());
+        }
+
+        @Test(timeout = 1000)
+        public void accountIsFriendsWithMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "isFriendsWith";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = boolean.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, Account.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter with type Account!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountIsFriendsWithFunctionTest01() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertFalse("Ensure that `Account's` `isFriendsWith` method returns false before adding any friends!", acc1.isFriendsWith(acc2));
+            Assert.assertFalse("Ensure that `Account's` `isFriendsWith` method returns false before adding any friends!", acc2.isFriendsWith(acc1));
+        }
+
+        @Test(timeout = 1000)
+        public void accountIsFriendsWithFunctionTest02() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            acc1.sendFriendRequest(acc2);
+            acc2.acceptDeclineFriendRequest(acc1, true);
+
+            Assert.assertTrue("Ensure that `Account's` `isFriendsWith` method returns true if the user is friends with the other user!", acc1.isFriendsWith(acc2));
+            Assert.assertTrue("Ensure that `Account's` `isFriendsWith` method returns true if the user is friends with the other user!", acc1.isFriendsWith(acc2));
+            Assert.assertFalse("Ensure that `Account's` `isFriendsWith` method returns false if it checks if the user is friends with itself", acc1.isFriendsWith(acc1));
+
+            try {
+                Assert.assertFalse("Ensure that `Account's` `isFriendsWith` method returns false if passed a null user!", acc1.isFriendsWith(null));
+            } catch (NullPointerException e) {
+                Assert.fail("Ensure that `Account's` `isFriendsWith` method does not throw a NullPointerException when passed a null user!");
+            }
+        }
+
+        @Test(timeout = 1000)
+        public void accountHasRequestedMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "hasRequested";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = boolean.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, Account.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter with type Account!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountHasRequestedFunctionTest01() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertFalse("Ensure that `Account's` `hasRequested` method returns false before sending any friend requests!", acc1.hasRequested(acc2));
+            Assert.assertFalse("Ensure that `Account's` `hasRequested` method returns false before sending any friend requests!", acc2.hasRequested(acc1));
+        }
+
+        @Test(timeout = 1000)
+        public void accountHasRequestedFunctionTest02() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            acc1.sendFriendRequest(acc2);
+
+            Assert.assertTrue("Ensure that `Account's` `hasRequested` method returns true if a request has been sent!", acc1.hasRequested(acc2));
+            Assert.assertFalse("Ensure that `Account's` `hasRequested` method returns false before sending any friend requests!", acc2.hasRequested(acc1));
+
+            acc2.acceptDeclineFriendRequest(acc1, false);
+
+            Assert.assertFalse("Ensure that `Account's` `hasRequested` method returns false if the request was accepted or declined", acc1.hasRequested(acc2));
+
+            try {
+                Assert.assertFalse("Ensure that `Account's` `hasRequested` method returns false if passed a null user!", acc1.hasRequested(null));
+            } catch (NullPointerException e) {
+                Assert.fail("Ensure that `Account's` `hasRequested` method does not throw a NullPointerException when passed a null user!");
+            }
+        }
+
+        @Test(timeout = 1000)
+        public void accountSendFriendRequestMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "sendFriendRequest";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = int.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, Account.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter with type Account!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountSendFriendRequestFunctionTest01() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertEquals("Ensure that `Account's` `sendFriendRequest` method returns 1 if the user exists and a request hasn't already been sent!", 1,  acc1.sendFriendRequest(acc2));
+        }
+
+        @Test(timeout = 1000)
+        public void accountSendFriendRequestFunctionTest02() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            acc1.sendFriendRequest(acc2);
+
+            Assert.assertEquals("Ensure that `Account's` `sendFriendRequest` method returns -1 if sending a request to itself!", -1,  acc1.sendFriendRequest(acc1));
+            Assert.assertEquals("Ensure that `Account's` `sendFriendRequest` method returns -1 if sending a duplicate request!", -1,  acc1.sendFriendRequest(acc2));
+            try {
+                Assert.assertEquals("Ensure that `Account's` `sendFriendRequest` method returns -1 if sending a request to a null user!", -1,  acc1.sendFriendRequest(null));
+            } catch (NullPointerException e) {
+                Assert.fail("Ensure that `Account's` `sendFriendRequest` method does not throw a NullPointerException when sending a request to a null user!");
+            }
+        }
+
+        @Test(timeout = 1000)
+        public void accountCancelFriendRequestMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "cancelFriendRequest";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = int.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, Account.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter with type Account!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountCancelFriendRequestFunctionTest01() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            acc1.sendFriendRequest(acc2);
+
+            Assert.assertEquals("Ensure that `Account's` `cancelFriendRequest` method returns 1 if the request has been sent and has been canceled!", 1,  acc1.cancelFriendRequest(acc2));
+        }
+
+        @Test(timeout = 1000)
+        public void accountCancelFriendRequestFunctionTest02() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertEquals("Ensure that `Account's` `cancelFriendRequest` method returns -1 if the request has not been sent yet!", -1,  acc1.cancelFriendRequest(acc2));
+            try {
+                Assert.assertEquals("Ensure that `Account's` `cancelFriendRequest` method returns -1 if cancelling a request from a null user", -1, acc1.cancelFriendRequest(null));
+            } catch (NullPointerException e) {
+                Assert.fail("Ensure that `Account's` `cancelFriendRequest` method doesn't throw a NullPointerException!");
+            }
+        }
+
+        @Test(timeout = 1000)
+        public void accountAcceptDeclineFriendRequestMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "acceptDeclineFriendRequest";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = int.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, Account.class, boolean.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 2 parameters with type Account and boolean!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountAcceptDeclineFriendRequestFunctionTest01() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            acc1.sendFriendRequest(acc2);
+
+            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns 1 if the request has been accepted successfully", 1,  acc2.acceptDeclineFriendRequest(acc1, true));
+
+            acc1.removeFriend(acc2);
+            acc1.sendFriendRequest(acc2);
+
+            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns 1 if the request has been declined successfully", 1,  acc2.acceptDeclineFriendRequest(acc1, false));
+        }
+
+        @Test(timeout = 1000)
+        public void accountAcceptDeclineFriendRequestFunctionTest02() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns -1 if accepting a non-existent request", -1,  acc2.acceptDeclineFriendRequest(acc1, true));
+            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns -1 if declining a non-existent request", -1,  acc2.acceptDeclineFriendRequest(acc1, false));
+            try {
+                Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns -1 if accepting/declining a request from a null user", -1, acc2.acceptDeclineFriendRequest(null, true));
+            } catch (NullPointerException e) {
+                Assert.fail("Ensure that `Account'` `acceptDeclineFriendRequest` method does not throw a NullPointerException when receiving a null user");
+            }
+        }
+
+        @Test(timeout = 1000)
+        public void accountRemoveFriendMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "removeFriend";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = int.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, Account.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter with type Account!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountRemoveFriendFunctionTest01() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            acc1.sendFriendRequest(acc2);
+            acc2.acceptDeclineFriendRequest(acc1, false);
+
+            Assert.assertEquals("Ensure that `Account's` `removeFriend` method returns 1 if it successfully removes a friend!", 1, acc1.removeFriend(acc2));
+        }
+
+        @Test(timeout = 1000)
+        public void accountRemoveFriendFunctionTest02() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertEquals("Ensure that `Account's` `removeFriend` method returns -1 if accepting a non-existent request", -1,  acc2.removeFriend(acc1));
+            try {
+                Assert.assertEquals("Ensure that `Account's` `removeFriend` method returns -1 if attempting to remove a null user", -1, acc2.removeFriend(null));
+            } catch (NullPointerException e) {
+                Assert.fail("Ensure that `Account'` `removeFriend` method does not throw a NullPointerException when receiving a null user");
+            }
+        }
+
+        @Test(timeout = 1000)
+        public void accountUserInListMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "userInList";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = int.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class, ArrayList.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 2 parameter with type String and ArrayList!");
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `private`!", Modifier.isPrivate(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        /*
+        @Test(timeout = 1000)
+        public void accountRemoveFriendFunctionTest01() {
+            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Method method;
+            try {
+                method = Account.class.getDeclaredMethod("userInList", String.class, ArrayList.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("UserInList doesn't exist");
+                return;
+            }
+            method.setAccessible(true);
+
+            ArrayList<Account> testList = new ArrayList<>();
+            testList.add(acc1);
+            testList.add(acc2);
+
+        }
+        */
+        
 
         // End Account Method Testing
 
