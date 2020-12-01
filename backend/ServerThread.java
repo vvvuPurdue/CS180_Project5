@@ -65,7 +65,7 @@ public class ServerThread extends Thread {
                         if (createStatus == 1) {
                             sendData("success", manager.getUser(requestBody[1]));
                         } else if (createStatus == -1) {
-                            sendData("invalidUsername");
+                            sendData("invalidUsername"); // should this be emptyFields ??
                         } else {
                             sendData("usernameExists");
                         }

@@ -496,7 +496,7 @@ public class Client { // TODO create friend and profile menus, establish all ser
     // method to open a window with the profile menu
     public static void profileMenu() throws ClassNotFoundException, IOException {
         JFrame profileFrame = new JFrame();
-        boolean menuOpen = true;
+        // boolean menuOpen = true;
         // int counter = 0;
         // do {
         //     counter++;
