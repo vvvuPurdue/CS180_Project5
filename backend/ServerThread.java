@@ -14,15 +14,14 @@ import java.util.ArrayList;
     * @version November 23, 2020
 */
 
-// TODO: getAllUsers()
-
+// TODO: write to file
 public class ServerThread extends Thread {
 
     private Socket socket;
     private Manager manager;
 
     private ObjectInputStream reader;
-    private ObjectOutputStream objectWriter;
+    private ObjectOutputStream writer;
 
     // When we instantiating t1he thread, use the server socket
     // and the database manager (static) assigned to us
@@ -39,8 +38,8 @@ public class ServerThread extends Thread {
         try {
             System.out.println("Running thread");
             reader = new ObjectInputStream(socket.getInputStream());
-            objectWriter = new ObjectOutputStream(socket.getOutputStream());
-            objectWriter.flush();
+            writer = new ObjectOutputStream(socket.getOutputStream());
+            writer.flush();
             String requestType = "";
             // read request and the request type
             // The first element in the array will always be the request type
@@ -201,7 +200,7 @@ public class ServerThread extends Thread {
             System.out.println(requestType + " request received!");
             socket.close();
             reader.close();
-            objectWriter.close();
+            writer.close();
             System.out.println("Closing thread...");
         } catch (IOException e) {
             e.printStackTrace();
@@ -213,12 +212,12 @@ public class ServerThread extends Thread {
     }
 
     private void sendData(String status) throws IOException{
-        objectWriter.writeObject(new String[] { status });
-        objectWriter.flush();
+        writer.writeObject(new String[] { status });
+        writer.flush();
     }
 
     private void sendData(String status, Object data) throws IOException {
-        objectWriter.writeObject(new Object[] { status, data });
-        objectWriter.flush();
+        writer.writeObject(new Object[] { status, data });
+        writer.flush();
     }
 }

@@ -46,9 +46,8 @@ public class Client { // TODO create friend and profile menus, establish all ser
 
     // io declaration
     public static Socket socket;
-    public static BufferedReader reader;
-    public static ObjectInputStream objectInput;
-    public static ObjectOutputStream objectOut;
+    public static ObjectOutputStream writer;
+    public static ObjectInputStream reader;
 
     public static String serverHost;
     public static int serverPort;
@@ -616,14 +615,15 @@ public class Client { // TODO create friend and profile menus, establish all ser
         boolean hasAccount = false;
         // creates an array to send to server as the request
         String[] accountInfo = { "loginUser", accountName, pass };
-        objectOut.writeObject(accountInfo);
+        writer.writeObject(accountInfo);
         // reads the status code and responds according to success or the error code
-        String success = reader.readLine();
-        switch (success) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, initializes the user account
             case "success":
                 hasAccount = true;
-                user = (Account) objectInput.readObject();
+                user = (Account) response[1];
                 break;
             // error code for an invalid username, displays error, then returns to login
             // loop
@@ -656,15 +656,16 @@ public class Client { // TODO create friend and profile menus, establish all ser
                 JOptionPane.QUESTION_MESSAGE);
 
         String[] accountParams = { "createAccount", accountName, pass, email, phone, bio, interests };
-        objectOut.writeObject(accountParams);
+        writer.writeObject(accountParams);
         // reads the status code and responds according to success or the error code
-        String result = reader.readLine();
-        switch (result) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, initializes user
             case "success":
                 JOptionPane.showInternalMessageDialog(null, "Successfully created account", "Account Created!",
                         JOptionPane.INFORMATION_MESSAGE);
-                user = (Account) objectInput.readObject();
+                user = (Account) response[1];
                 hasAccount = true;
                 break;
             // error for a username already existing, returns to account initialization loop
@@ -672,8 +673,7 @@ public class Client { // TODO create friend and profile menus, establish all ser
                 JOptionPane.showInternalMessageDialog(null, "Username already exists", "User Error!",
                         JOptionPane.ERROR_MESSAGE);
                 break;
-            // error for empty fields in account info, returns to account initialization
-            // loop
+            // error for empty fields in account info, returns to account initialization loop
             case "emptyFields":
                 JOptionPane.showInternalMessageDialog(null, "You must fill every field to create an account",
                         "User Error!", JOptionPane.ERROR_MESSAGE);
@@ -687,13 +687,14 @@ public class Client { // TODO create friend and profile menus, establish all ser
             throws IOException, ClassNotFoundException {
         connectServer();
         String[] updateString = { "updateAccount", accountName, email, phoneNo, bio, interests };
-        objectOut.writeObject(updateString);
+        writer.writeObject(updateString);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, updates the Client account
             case "success":
-                user = (Account) objectInput.readObject();
+                user = (Account) response[1];
                 break;
             // error for a username that could not be found, Client account is not updated
             case "usernameNotFound":
@@ -732,13 +733,14 @@ public class Client { // TODO create friend and profile menus, establish all ser
         connectServer();
         String[] updateString = { "updateAccount", accountName, email, phoneNo, bio, interests, newUsername,
                 newPassword };
-        objectOut.writeObject(updateString);
+        writer.writeObject(updateString);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, updates the Client account
             case "success":
-                user = (Account) objectInput.readObject();
+                user = (Account) response[1];
                 break;
             // error for a username that could not be found, Client account is not updated
             case "usernameNotFound":
@@ -772,32 +774,30 @@ public class Client { // TODO create friend and profile menus, establish all ser
         disconnectServer();
     }
 
-    public static boolean isFriendsWith(String username, String username2) throws IOException {
+    public static boolean isFriendsWith(String username, String username2) throws IOException, ClassNotFoundException {
         connectServer();
         String[] isFriends = { "isFriendsWith", username, username2 };
-        objectOut.writeObject(isFriends);
+        writer.writeObject(isFriends);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, returns if two Accounts are friends
             case "success":
-                boolean isFriend = objectInput.readBoolean();
+                boolean isFriend = (boolean) response[1];
                 disconnectServer();
                 return isFriend;
-            // error code for an invalid user, returns that Accounts are not friends as at
-            // least one is invalid
+            // error code for an invalid user, returns that Accounts are not friends as at least one is invalid
             case "usernameNotFound":
                 JOptionPane.showInternalMessageDialog(null, "Username " + username + " is not found!", "User Error!",
                         JOptionPane.ERROR_MESSAGE);
                 break;
-            // error code for an invalid user, returns that Accounts are not friends as at
-            // least one is invalid
+            // error code for an invalid user, returns that Accounts are not friends as at least one is invalid
             case "username2NotFound":
                 JOptionPane.showInternalMessageDialog(null, "Username " + username2 + " is not found!", "User Error!",
                         JOptionPane.ERROR_MESSAGE);
                 break;
-            // error code for an invalid user, returns that Accounts are not friends as at
-            // least one is invalid
+            // error code for an invalid user, returns that Accounts are not friends as at least one is invalid
             case "emptyFields":
                 JOptionPane.showInternalMessageDialog(null, "Fields are empty!", "Input Error!",
                         JOptionPane.ERROR_MESSAGE);
@@ -810,13 +810,14 @@ public class Client { // TODO create friend and profile menus, establish all ser
     public static void sendFriendRequest(String username) throws IOException, ClassNotFoundException {
         connectServer();
         String[] friendRequest = { "sendFriendRequest", accountName, username };
-        objectOut.writeObject(friendRequest);
+        writer.writeObject(friendRequest);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, updates Account with updated friend requests
             case "success":
-                user = (Account) objectInput.readObject();
+                user = (Account) response[1];
                 break;
             // error code for an invalid username, Account is not updated
             case "usernameNotFound":
@@ -839,13 +840,14 @@ public class Client { // TODO create friend and profile menus, establish all ser
     public static void cancelFriendRequest(String username) throws IOException, ClassNotFoundException {
         connectServer();
         String[] friendRequest = { "cancelFriendRequest", accountName, username };
-        objectOut.writeObject(friendRequest);
+        writer.writeObject(friendRequest);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, updates Account with updated friend requests
             case "success":
-                user = (Account) objectInput.readObject();
+                user = (Account) response[1];
                 break;
             // error code for an invalid username, Account is not updated
             case "usernameNotFound":
@@ -868,13 +870,14 @@ public class Client { // TODO create friend and profile menus, establish all ser
     public static void acceptFriendRequest(String username) throws IOException, ClassNotFoundException {
         connectServer();
         String[] friendRequest = { "acceptFriendRequest", accountName, username };
-        objectOut.writeObject(friendRequest);
+        writer.writeObject(friendRequest);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, updates Account with updated friends list
             case "success":
-                user = (Account) objectInput.readObject();
+                user = (Account) response[1];
                 break;
             // error code for an invalid username, Account is not updated
             case "usernameNotFound":
@@ -897,13 +900,14 @@ public class Client { // TODO create friend and profile menus, establish all ser
     public static void declineFriendRequest(String username) throws IOException, ClassNotFoundException {
         connectServer();
         String[] friendRequest = { "declineFriendRequest", accountName, username };
-        objectOut.writeObject(friendRequest);
+        writer.writeObject(friendRequest);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, updates Account with updated friend requests
             case "success":
-                user = (Account) objectInput.readObject();
+                user = (Account) response[1];
                 break;
             // error code for an invalid username, Account is not updated
             case "usernameNotFound":
@@ -926,13 +930,14 @@ public class Client { // TODO create friend and profile menus, establish all ser
     public static void removeFriend(String username) throws IOException, ClassNotFoundException {
         connectServer();
         String[] friendRequest = { "removeFriend", accountName, username };
-        objectOut.writeObject(friendRequest);
+        writer.writeObject(friendRequest);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, updates Account with updated friends list
             case "success":
-                user = (Account) objectInput.readObject();
+                user = (Account) response[1];
                 break;
             // error code for an invalid username, Account is not updated
             case "usernameNotFound":
@@ -955,14 +960,15 @@ public class Client { // TODO create friend and profile menus, establish all ser
     public static Account getUser(String username) throws IOException, ClassNotFoundException {
         connectServer();
         String[] request = { "getUser", username };
-        objectOut.writeObject(request);
+        writer.writeObject(request);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, returns the requested user Account
             case "success":
                 disconnectServer();
-                return (Account) objectInput.readObject();
+                return (Account) response[1];
             // error for a user that could not be found, returns null
             case "usernameNotFound":
                 JOptionPane.showInternalMessageDialog(null, "Username " + username + " is not found!", "User Error!",
@@ -977,14 +983,15 @@ public class Client { // TODO create friend and profile menus, establish all ser
     public static ArrayList<Account> getAllUsers() throws IOException, ClassNotFoundException {
         connectServer();
         String[] request = { "getAllUsers", user.getUsername() };
-        objectOut.writeObject(request);
+        writer.writeObject(request);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, returns the requested user Account
             case "success":
                 disconnectServer();
-                return (ArrayList<Account>) objectInput.readObject();
+                return (ArrayList<Account>) response[1];
             // error for a user that could not be found, returns null
             default:
                 JOptionPane.showInternalMessageDialog(null, "Something went wrong when getting all users.", "Error!",
@@ -994,16 +1001,17 @@ public class Client { // TODO create friend and profile menus, establish all ser
         }
     }
 
-    public static boolean hasRequested(String username, String username2) throws IOException {
+    public static boolean hasRequested(String username, String username2) throws IOException, ClassNotFoundException {
         connectServer();
         String[] request = { "hasRequested", username, username2 };
-        objectOut.writeObject(request);
+        writer.writeObject(request);
         // reads the status code and responds according to success or the error code
-        String code = reader.readLine();
-        switch (code) {
+        Object[] response = (Object[]) reader.readObject();
+        String status = (String) response[0];
+        switch (status) {
             // success code, returns if the first user has requested the second user
             case "success":
-                boolean hasRequest = objectInput.readBoolean();
+                boolean hasRequest = (boolean) response[1];
                 disconnectServer();
                 return hasRequest;
             // error code for a requesting user which could not be found, returns false
@@ -1027,30 +1035,21 @@ public class Client { // TODO create friend and profile menus, establish all ser
     }
 
     public static void connectServer() throws UnknownHostException, IOException {
-
         socket = new Socket(serverHost, serverPort);
-
         // establishes IO method with server
-        // reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        // writer = new PrintWriter(socket.getOutputStream());
-        // objectInput = new ObjectInputStream(socket.getInputStream());
-        // objectOut = new ObjectOutputStream(socket.getOutputStream());
-
-        objectOut = new ObjectOutputStream(socket.getOutputStream());
-        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        objectInput = new ObjectInputStream(socket.getInputStream());
+        writer = new ObjectOutputStream(socket.getOutputStream());
+        reader = new ObjectInputStream(socket.getInputStream());
     }
 
     public static void disconnectServer() throws IOException {
         socket.close();
         reader.close();
-        objectInput.close();
-        objectOut.close();
+        writer.close();
     }
 
+    // TODO: get rid of all GUIss
     public static void closeClient() throws IOException {
-        connectServer();
-        disconnectServer();
+        
     }
 
     public static boolean deleteAccount() throws IOException {
@@ -1059,7 +1058,7 @@ public class Client { // TODO create friend and profile menus, establish all ser
                 "Confirmation Required", JOptionPane.YES_NO_OPTION);
         if (confirmation == JOptionPane.YES_OPTION) {
             String[] deleteAccount = { "deleteAccount", accountName, pass };
-            objectOut.writeObject(deleteAccount);
+            writer.writeObject(deleteAccount);
             disconnectServer();
             return true;
         }
