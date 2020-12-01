@@ -348,6 +348,7 @@ public class Client { // TODO create friend and profile menus, establish all ser
         Container content = friendFrame.getContentPane();
         content.setLayout(new BorderLayout());
 
+        /*
         JPanel headerGUI = new JPanel();
         JLabel friendRequestsHeader = new JLabel("Incoming Friend Requests", SwingConstants.CENTER);
         JLabel requestedFriendsHeader = new JLabel("Outgoing Friend Requests", SwingConstants.CENTER);
@@ -356,53 +357,66 @@ public class Client { // TODO create friend and profile menus, establish all ser
         headerGUI.add(friendRequestsHeader);
         headerGUI.add(requestedFriendsHeader);
         content.add(headerGUI, BorderLayout.NORTH);
+        */
 
-        JPanel friendRequestsGUI = new JPanel(new FlowLayout());
+        JPanel friendRequestsGUI = new JPanel(new BorderLayout());
+        JLabel friendRequestsHeader = new JLabel("Incoming Friend Requests", SwingConstants.CENTER);
+        JPanel allFriendRequests = new JPanel();
         ArrayList<Account> friendRequestsList = user.getFriendRequests();
         if (friendRequestsList.size() != 0) {
             for (int i = 0; i < friendRequestsList.size(); i++) {
                 UsernameButton eachFriendRequest = new UsernameButton(friendRequestsList.get(i).getUsername(),
                         "friendRequest", friendRequestsList.get(i));
                 eachFriendRequest.addActionListener(actionListener);
-                friendRequestsGUI.add(eachFriendRequest);
+                allFriendRequests.add(eachFriendRequest);
             }
         } else {
             JLabel emptyList = new JLabel("You currently have no incoming friend requests.");
-            friendRequestsGUI.add(emptyList);
+            allFriendRequests.add(emptyList);
         }
+        friendRequestsGUI.add(friendRequestsHeader, BorderLayout.NORTH);
+        friendRequestsGUI.add(allFriendRequests, BorderLayout.CENTER);
         content.add(friendRequestsGUI, BorderLayout.CENTER);
 
-        JPanel requestedFriendsGUI = new JPanel(new FlowLayout());
+        JPanel requestedFriendsGUI = new JPanel(new BorderLayout());
+        JLabel requestedFriendsHeader = new JLabel("Outgoing Friend Requests", SwingConstants.CENTER);
+        JPanel allRequestedFriends = new JPanel();
         ArrayList<Account> requestedFriendsList = user.getRequestedFriends();
         if (requestedFriendsList.size() != 0) {
             for (int i = 0; i < requestedFriendsList.size(); i++) {
                 UsernameButton eachRequestedFriend = new UsernameButton(requestedFriendsList.get(i).getUsername(),
                         "requestedFriend", requestedFriendsList.get(i));
                 eachRequestedFriend.addActionListener(actionListener);
-                requestedFriendsGUI.add(eachRequestedFriend);
+                allRequestedFriends.add(eachRequestedFriend);
             }
         } else {
             JLabel emptyList = new JLabel("You currently have no outgoing friend requests.");
-            requestedFriendsGUI.add(emptyList);
+            allRequestedFriends.add(emptyList);
         }
+        requestedFriendsGUI.add(requestedFriendsHeader, BorderLayout.NORTH);
+        requestedFriendsGUI.add(allRequestedFriends, BorderLayout.CENTER);
         content.add(requestedFriendsGUI, BorderLayout.EAST);
 
-        JPanel friendsGUI = new JPanel(new FlowLayout());
+        JPanel friendsGUI = new JPanel(new BorderLayout());
+        JLabel friendsHeader = new JLabel("Friends", SwingConstants.CENTER);
+        JPanel allFriends = new JPanel();
         ArrayList<Account> friendsList = user.getFriends();
         if (friendsList.size() != 0) {
             for (int i = 0; i < friendsList.size(); i++) {
                 UsernameButton eachFriend = new UsernameButton(friendsList.get(i).getUsername(), "friend",
                         friendsList.get(i));
                 eachFriend.addActionListener(actionListener);
-                friendsGUI.add(eachFriend);
+                allFriends.add(eachFriend);
             }
         } else {
             JLabel emptyList = new JLabel("You currently have no friends.");
-            friendsGUI.add(emptyList);
+            allFriends.add(emptyList);
         }
+        friendsGUI.add(friendsHeader, BorderLayout.NORTH);
+        friendsGUI.add(allFriends, BorderLayout.CENTER);
         content.add(friendsGUI, BorderLayout.WEST);
 
-        friendFrame.setSize(600, 400);
+        friendFrame.setSize(600, 700);
         friendFrame.setLocationRelativeTo(null);
         friendFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // might need to remove this later
         friendFrame.pack();
