@@ -14,7 +14,6 @@ import java.util.ArrayList;
     * @version November 23, 2020
 */
 
-// TODO: write to file
 public class ServerThread extends Thread {
 
     private Socket socket;
