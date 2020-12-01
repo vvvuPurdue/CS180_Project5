@@ -27,11 +27,13 @@ public class Server {
 
         // Starting up our database/manageer/model
         Manager manager = new Manager();
-        manager.createAccount("bob", "password", "bob@email.com", "number", "this is my bio yey", "pizza, sports, sleeping");
-        manager.createAccount("bobaFett", "password", "starwars@email.com", "number", "i like flying", "star wars, light sabers, blasters");
-        manager.createAccount("cowboy", "password", "cow@email.com", "number", "yee haw", "cows");
-        manager.createAccount("sam", "password", "sam@purdue.edu", "number", "hi im sam", "interested in nothing except cheesecake");
-        manager.getUser("bob").sendFriendRequest(manager.getUser("sam"));
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                System.out.println("Server has ended");
+                manager.saveToFile();
+            }
+        });
 
         while (true) {
             // client connection
