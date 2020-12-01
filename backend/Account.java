@@ -82,7 +82,7 @@ public class Account implements Serializable {
     // send a friend request to other user (adding to current requestedFriends)
     // ensure that they both are not already friends
     public int sendFriendRequest(Account user) {
-        if (!isFriendsWith(user)) {
+        if (!isFriendsWith(user) && !user.username.equals(this.username)) {
             this.requestedFriends.add(user);
             user.friendRequests.add(this);
             return 1;

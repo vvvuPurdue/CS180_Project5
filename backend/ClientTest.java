@@ -2,6 +2,7 @@ package backend;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 /**
     * Client testing
@@ -25,9 +26,21 @@ public class ClientTest {
 
         String message;
         do {
+            connectServer();
             System.out.print("Send message to server: ");
             message = scan.nextLine();
-            System.out.println(message.split(" "));
+            objectOut.writeObject(message.split(" "));
+            
+            // modify this depending on what u want
+            Object[] response = (Object[]) objectIn.readObject();
+            String status = (String) response[0];
+            System.out.println("Status: " + status);
+            ArrayList<Account> users = (ArrayList<Account>) response[1];
+            for (Account user : users) {
+                System.out.print(user.getUsername() + ", ");
+            }
+            System.out.println("\n");
+            disconnectServer();
         } while (!message.equals("closeClient"));
 
         scan.close();

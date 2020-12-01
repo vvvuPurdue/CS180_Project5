@@ -123,7 +123,7 @@ public class ServerThread extends Thread {
                         if (getUser == null) {
                             sendData("usernameNotFound", getUser);
                         } else {
-                            sendData("success");
+                            sendData("success", getUser);
                         }
                         break;
                     case ("isFriendsWith"):
