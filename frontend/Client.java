@@ -372,7 +372,7 @@ public class Client { // TODO create friend and profile menus, establish all ser
             }
         } else {
             JLabel emptyList = new JLabel("You currently have no incoming friend requests.");
-            friendRequestsGUI.add(emptyList);
+            allFriendRequests.add(emptyList);
         }
         friendRequestsGUI.add(friendRequestsHeader, BorderLayout.NORTH);
         friendRequestsGUI.add(allFriendRequests, BorderLayout.CENTER);
@@ -391,7 +391,7 @@ public class Client { // TODO create friend and profile menus, establish all ser
             }
         } else {
             JLabel emptyList = new JLabel("You currently have no outgoing friend requests.");
-            requestedFriendsGUI.add(emptyList);
+            allRequestedFriends.add(emptyList);
         }
         requestedFriendsGUI.add(requestedFriendsHeader, BorderLayout.NORTH);
         requestedFriendsGUI.add(allRequestedFriends, BorderLayout.CENTER);
@@ -410,7 +410,7 @@ public class Client { // TODO create friend and profile menus, establish all ser
             }
         } else {
             JLabel emptyList = new JLabel("You currently have no friends.");
-            friendsGUI.add(emptyList);
+            allFriends.add(emptyList);
         }
         friendsGUI.add(friendsHeader, BorderLayout.NORTH);
         friendsGUI.add(allFriends, BorderLayout.CENTER);
