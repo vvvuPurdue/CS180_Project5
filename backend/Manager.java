@@ -1,7 +1,7 @@
 package backend;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.io.*;
 
 /**
     * Manager
@@ -20,7 +20,19 @@ public class Manager {
     private static ArrayList<Account> allUsers;
 
     public Manager() {
-        allUsers = new ArrayList<Account>();
+        File f = new File("allUsers.txt");
+        try (FileInputStream fi = new FileInputStream(f)) {
+            ObjectInputStream reader = new ObjectInputStream(fi);
+            allUsers = (ArrayList<Account>) reader.readObject();
+            reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found! Creating new file...");
+            allUsers = new ArrayList<Account>();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     // getter method for all users
@@ -80,7 +92,6 @@ public class Manager {
                 return 1;
             }
             return -3;
-            
         }
         return -4;
     }
@@ -120,5 +131,19 @@ public class Manager {
             }
         }
         return -1;
+    }
+
+    // saves everything to file
+    public void saveToFile() {
+        File f = new File("allUsers.txt");
+        try (FileOutputStream fos = new FileOutputStream(f, false)) {
+            ObjectOutputStream writer = new ObjectOutputStream(fos);
+            writer.writeObject(allUsers);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
