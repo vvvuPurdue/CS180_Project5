@@ -1,7 +1,6 @@
 import backend.*;
 import frontend.*;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -42,12 +41,6 @@ public class RunLocalTest {
     }
 
     public static class TestCase {
-
-        @After
-        public void removeAllUsers() {
-            File f = new File("allUsers.txt");
-            f.delete();
-        }
 
         // Begin Account Class Testing
         @Test(timeout = 1000)
@@ -2710,6 +2703,8 @@ public class RunLocalTest {
             } catch (ClassNotFoundException e) {
                 Assert.fail("Ensure the Manager class exists i think.");
             }
+
+            new File("allUsers.txt").delete();
         }
 
         @Test(timeout = 1000)
@@ -2737,8 +2732,10 @@ public class RunLocalTest {
             } catch (ClassNotFoundException e) {
                 Assert.fail("Ensure the Manager class exists i think.");
             }
+
+            new File("allUsers.txt").delete();
         }
-        
+
         // End Manager Method Testing
 
         // End Manager Class Testing
