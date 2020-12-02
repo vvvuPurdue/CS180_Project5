@@ -21,6 +21,15 @@ public class NewClient {
     // storing the current client signed in on client side
     private static Account user;
 
+    // gui constants
+    private static final Font titleFont = new Font("Arial", 1, 18);
+
+    // Main menu elements
+    private static JButton profileMenuButton;
+    private static JButton friendMenuButton;
+    private static JButton searchMenuButton;
+    private static JButton deleteAccountButton;
+
     // edit account fields
     private static JButton editProfileButton;
     private static JButton saveChangesButton;
@@ -48,13 +57,13 @@ public class NewClient {
         // loop until user cancels at start menu or enters valid user info
         while (true) {
             int loginOrCreate = startingMenu();
-            System.out.println(loginOrCreate);
             if ((loginOrCreate == 0 && login()) || (loginOrCreate == 1 && createAccount())) {
                 break;
             } else if (loginOrCreate == -1) {
                 return;
             }
         }
+        mainMenu();
     }
 
     /*
@@ -106,7 +115,7 @@ public class NewClient {
         * If there are errors, show appropriate message dialogs
     */
     public static boolean createAccount() {
-        System.out.println("Creating new account");
+        System.out.println("Creating new account...");
         String username = JOptionPane.showInputDialog(null, "Enter a username", JOptionPane.QUESTION_MESSAGE);
         if (username == null) return false;
         String password = JOptionPane.showInputDialog(null, "Enter a password", JOptionPane.QUESTION_MESSAGE);
@@ -143,8 +152,32 @@ public class NewClient {
         * Can view friends list, view profile, search new people, and delete account
     */
     public static void mainMenu() {
+        System.out.println("Entering main menu...");
+        // initial setup
         JFrame mainMenu = new JFrame();
         Container content = mainMenu.getContentPane();
-        
+        content.setLayout(new BorderLayout());
+        // creating title
+        JLabel header = new JLabel("Main Menu", SwingConstants.CENTER);
+        header.setFont(titleFont);
+        content.add(header, BorderLayout.NORTH);
+        // create new buttons
+        profileMenuButton = new JButton("View Profile");
+        friendMenuButton = new JButton("View Friends");
+        searchMenuButton = new JButton ("Search for Users");
+        deleteAccountButton = new JButton("Delete Account");
+        // adding new buttons to new panel, then add to menu
+        JPanel mainMenuPanel = new JPanel();
+        mainMenuPanel.add(profileMenuButton);
+        mainMenuPanel.add(friendMenuButton);
+        mainMenuPanel.add(searchMenuButton);
+        mainMenuPanel.add(deleteAccountButton);
+        content.add(mainMenuPanel, BorderLayout.CENTER);
+        // after adding everything, finally show menu
+        mainMenu.setSize(600, 400);
+        mainMenu.setLocationRelativeTo(null);
+        mainMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainMenu.pack();
+        mainMenu.setVisible(true);
     }
 }
