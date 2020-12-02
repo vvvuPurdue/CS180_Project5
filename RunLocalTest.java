@@ -1,9 +1,7 @@
 import backend.*;
 import frontend.*;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -11,7 +9,6 @@ import org.junit.runner.notification.Failure;
 
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -28,7 +25,7 @@ import static org.junit.Assert.fail;
  * A set of test cases for the entire project to be run locally.
  *
  * @author Team 15-3, CS-180 Merge
- * @version December 1st, 2020
+ * @version December 2nd, 2020
  */
 
 public class RunLocalTest {
@@ -995,6 +992,294 @@ public class RunLocalTest {
         }
 
         @Test(timeout = 1000)
+        public void accountSetEmailMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "setEmail";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = void.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter of type String!");
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetEmailFunctionTest01() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setEmail";
+            String className = "Account";
+            String testInput = "email2";
+
+            acc.setPassword(testInput);
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the email correctly!", testInput, acc.getEmail());
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetEmailFunctionTest02() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setPassword";
+            String className = "Account";
+            String testInput = null;
+
+            acc.setPassword(testInput);
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method sets the email correctly!", acc.getEmail());
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetPhoneNumberMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "setPhoneNumber";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = void.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter of type String!");
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetPasswordFunctionTest01() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setPhoneNumber";
+            String className = "Account";
+            String testInput = "2222222222";
+
+            acc.setPassword(testInput);
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the phone number correctly!", testInput, acc.getPhoneNumber()));
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetPhoneNumberFunctionTest02() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setPhoneNumber";
+            String className = "Account";
+            String testInput = null;
+
+            acc.setPassword(testInput);
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method sets the phone number correctly!", acc.getPhoneNumber());
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetBioMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "setBio";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = void.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter of type String!");
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetBioFunctionTest01() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setBio";
+            String className = "Account";
+            String testInput = "bio2";
+
+            acc.setPassword(testInput);
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the bio correctly!", testInput, acc.getBio());
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetBioFunctionTest02() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setBio";
+            String className = "Account";
+            String testInput = null;
+
+            acc.setPassword(testInput);
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method sets the bio correctly!", acc.getBio());
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetInterestsMethodTest() {
+            Class<?> clazz;
+            String className = "Account";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "setInterests";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = void.class;
+
+            // Set the class being tested
+            clazz = Account.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter of type String!");
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetInterestsFunctionTest01() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setInterests";
+            String className = "Account";
+            String testInput = "interests2";
+
+            acc.setPassword(testInput);
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the interests correctly!", testInput, acc.getInterests());
+        }
+
+        @Test(timeout = 1000)
+        public void accountSetInterestsFunctionTest02() {
+            Account acc = new Account("username", "password", "email@email.com", "1234567890",
+                    "bio", "interests");
+
+            String methodName = "setInterests";
+            String className = "Account";
+            String testInput = null;
+
+            acc.setPassword(testInput);
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method sets the interests correctly!", acc.getInterests());
+        }
+
+        @Test(timeout = 1000)
         public void accountGetFriendsMethodTest() {
             Class<?> clazz;
             String className = "Account";
@@ -1716,31 +2001,6 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-
-        /*
-        @Test(timeout = 1000)
-        public void accountRemoveFriendFunctionTest01() {
-            Account acc1 = new Account("username1", "password1", "email1@email.com", "1111111111",
-                    "bio1", "interests1");
-            Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
-                    "bio2", "interests2");
-
-            Method method;
-            try {
-                method = Account.class.getDeclaredMethod("userInList", String.class, ArrayList.class);
-            } catch (NoSuchMethodException e) {
-                Assert.fail("UserInList doesn't exist");
-                return;
-            }
-            method.setAccessible(true);
-
-            ArrayList<Account> testList = new ArrayList<>();
-            testList.add(acc1);
-            testList.add(acc2);
-
-        }
-        */
-        
 
         // End Account Method Testing
 
