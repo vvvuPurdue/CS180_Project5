@@ -1,6 +1,7 @@
 import backend.*;
 import frontend.*;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -41,6 +42,12 @@ public class RunLocalTest {
     }
 
     public static class TestCase {
+
+        @After
+        public void removeAllUsers() {
+            File f = new File("allUsers.txt");
+            f.delete();
+        }
 
         // Begin Account Class Testing
         @Test(timeout = 1000)
@@ -2144,10 +2151,594 @@ public class RunLocalTest {
             m.createAccount("username2", "password2", "email2@email.com", "2222222222",
                     "bio2", "interests2");
 
-            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns an empty list before adding an users!", 2, m.getAllUsers().size());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns a list with all users!", 2, m.getAllUsers().size());
         }
 
-        // TODO: Finish Manager Method Tests
+        @Test(timeout = 1000)
+        public void managerGetUserMethodTest() {
+            Class<?> clazz;
+            String className = "Manager";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "getUser";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = Account.class;
+
+            // Set the class being tested
+            clazz = Manager.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter of type String!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void managerGetUserFunctionTest01() {
+            Manager m = new Manager();
+
+            String methodName = "getUser";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            m.createAccount("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns the correct user!", "bio1", m.getUser("username1").getBio());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns the correct user!", "bio2", m.getUser("username2").getBio());
+        }
+
+        @Test(timeout = 1000)
+        public void managerGetUserFunctionTest02() {
+            Manager m = new Manager();
+
+            String methodName = "getUser";
+            String className = "Manager";
+
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method returns null if the user is not found!", m.getUser("username1"));
+        }
+
+        @Test(timeout = 1000)
+        public void managerCreateAccountMethodTest() {
+            Class<?> clazz;
+            String className = "Manager";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "createAccount";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = int.class;
+
+            // Set the class being tested
+            clazz = Manager.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class, String.class, String.class, String.class, String.class, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 6 parameters of type String!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void managerCreateAccountFunctionTest01() {
+            Manager m = new Manager();
+
+            String methodName = "createAccount";
+            String className = "Manager";
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns 1 when creating a new user!", 1, m.createAccount("username1", "password1",
+                    "email1@email.com", "1111111111", "bio1", "interests1"));
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns 1 when creating a new user!", 1, m.createAccount("username2", "password2",
+                    "email2@email.com", "2222222222", "bio2", "interests2"));
+        }
+
+        @Test(timeout = 1000)
+        public void managerCreateAccountFunctionTest02() {
+            Manager m = new Manager();
+
+            String methodName = "createAccount";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns -2 when given a duplicate username!", -2, m.createAccount("username1", "password1",
+                    "email1@email.com", "1111111111", "bio1", "interests1"));
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns -1 when given an invalid username!", -1, m.createAccount("user name2", "password2",
+                    "email2@email.com", "2222222222", "bio2", "interests2"));
+        }
+
+        @Test(timeout = 1000)
+        public void managerUpdateAccount01MethodTest() {
+            Class<?> clazz;
+            String className = "Manager";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "updateAccount";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = int.class;
+
+            // Set the class being tested
+            clazz = Manager.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class, String.class, String.class, String.class, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 5 parameters of type String!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void managerUpdateAccount01FunctionTest01() {
+            Manager m = new Manager();
+
+            String methodName = "updateAccount";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns 1 when given a proper username!", 1, m.updateAccount("username1", "newEmail@email.com",
+                    "2222222222", "newBio", "newInterests"));
+
+            Account user = m.getUser("username1");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method updates the email correctly!", "newEmail@email.com", user.getEmail());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method updates the phone number correctly!", "2222222222", user.getPhoneNumber());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method updates the bio correctly!", "newBio", user.getBio());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method updates the interests correctly!", "newInterests", user.getInterests());
+        }
+
+        @Test(timeout = 1000)
+        public void managerUpdateAccount01FunctionTest02() {
+            Manager m = new Manager();
+
+            String methodName = "updateAccount";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns -11 when given a non-existent username!", -1, m.updateAccount("username2", "newEmail@email.com",
+                    "2222222222", "newBio", "newInterests"));
+        }
+
+        @Test(timeout = 1000)
+        public void managerUpdateAccount02MethodTest() {
+            Class<?> clazz;
+            String className = "Manager";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "updateAccount";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = int.class;
+
+            // Set the class being tested
+            clazz = Manager.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 8 parameters of type String!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void managerUpdateAccount02FunctionTest01() {
+            Manager m = new Manager();
+
+            String methodName = "updateAccount";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns 1 when given a proper username!", 1, m.updateAccount("username1", "newEmail@email.com",
+                    "2222222222", "newBio", "newInterests", "password1", "username2", "password2"));
+
+            Account user = m.getUser("username2");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method updates the email correctly!", "newEmail@email.com", user.getEmail());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method updates the phone number correctly!", "2222222222", user.getPhoneNumber());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method updates the bio correctly!", "newBio", user.getBio());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method updates the interests correctly!", "newInterests", user.getInterests());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method updates the username correctly!", "username2", user.getUsername());
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method updates the password correctly!", "password2", user.getPassword());
+        }
+
+        @Test(timeout = 1000)
+        public void managerUpdateAccount02FunctionTest02() {
+            Manager m = new Manager();
+
+            String methodName = "updateAccount";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            m.createAccount("username5", "password5", "email5@email.com", "5555555555",
+                    "bio5", "interests5");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns -1 when given an invalid new username!", -1, m.updateAccount("username1", "newEmail@email.com",
+                    "2222222222", "newBio", "newInterests", "password1", "user name2", "password2"));
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns -2 when trying to change username to one that already exists!", -2, m.updateAccount("username1",
+                    "newEmail@email.com", "2222222222", "newBio", "newInterests", "password1", "username5", "password2"));
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns -3 when given the wrong password!", -3, m.updateAccount("username1", "newEmail@email.com",
+                    "2222222222", "newBio", "newInterests", "password8", "username2", "password2"));
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns -4 when given a non-existent current username!", -4, m.updateAccount("username8",
+                    "newEmail@email.com", "2222222222", "newBio", "newInterests", "password1", "username2", "password2"));
+        }
+
+        @Test(timeout = 1000)
+        public void managerDeleteAccountMethodTest() {
+            Class<?> clazz;
+            String className = "Manager";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "deleteAccount";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = int.class;
+
+            // Set the class being tested
+            clazz = Manager.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 2 parameters of type String!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void managerDeleteAccountFunctionTest01() {
+            Manager m = new Manager();
+
+            String methodName = "deleteAccount";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns 1 when given a proper username and password!", 1, m.deleteAccount("username1", "password1"));
+            Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method removes the user from the allUsers list!", m.getUser("username1"));
+        }
+
+        @Test(timeout = 1000)
+        public void managerDeleteAccountFunctionTest02() {
+            Manager m = new Manager();
+
+            String methodName = "deleteAccount";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns -1 when given the incorrect password!", -1, m.deleteAccount("username1", "password8"));
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns -2 when given a non-existent username!", -2, m.deleteAccount("username8", "password8"));
+        }
+
+        @Test(timeout = 1000)
+        public void managerSearchUsersMethodTest() {
+            Class<?> clazz;
+            String className = "Manager";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "searchUsers";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = ArrayList.class;
+
+            // Set the class being tested
+            clazz = Manager.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName, String.class);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 1 parameter of type String!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void managerSearchUsersFunctionTest01() {
+            Manager m = new Manager();
+
+            String methodName = "searchUsers";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            m.createAccount("usernombre2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            ArrayList<Account> testList1 = m.searchUsers("user");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns a list with all users that contain the given text!", 2, testList1.size());
+
+            ArrayList<Account> testList2 = m.searchUsers("name");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns a list with all users that contain the given text!", 1, testList2.size());
+        }
+
+        @Test(timeout = 1000)
+        public void managerSearchUsersFunctionTest02() {
+            Manager m = new Manager();
+
+            String methodName = "searchUsers";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            m.createAccount("usernombre2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            ArrayList<Account> testList1 = m.searchUsers("nameduser");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns a list with all users that contain the given text!", 0, testList1.size());
+        }
+
+        @Test(timeout = 1000)
+        public void managerSaveToFileMethodTest() {
+            Class<?> clazz;
+            String className = "Manager";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "saveToFile";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = void.class;
+
+            // Set the class being tested
+            clazz = Manager.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 0 parameters!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void managerSaveToFileFunctionTest01() {
+            Manager m = new Manager();
+
+            String methodName = "saveToFile";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            m.createAccount("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            m.saveToFile();
+
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("allUsers.txt")))) {
+                ArrayList<Account> accountList;
+                Object obj = ois.readObject();
+                if (obj instanceof ArrayList) {
+                    accountList = (ArrayList<Account>) obj;
+                    ArrayList<Account> allUsers = m.getAllUsers();
+
+                    Assert.assertEquals("Ensure that `" + className + "'s` `" + methodName + "` method writes the whole allUsers list to the file!", allUsers.size(), accountList.size());
+
+                    Account user1 = accountList.get(0);
+                    Account user2 = accountList.get(0);
+
+                    Assert.assertEquals("Ensure that `" + className + "'s` `" + methodName + "` method writes every part of the Account to the file!", user1.getUsername(), user2.getUsername());
+                    Assert.assertEquals("Ensure that `" + className + "'s` `" + methodName + "` method writes every part of the Account to the file!", user1.getPassword(), user2.getPassword());
+                    Assert.assertEquals("Ensure that `" + className + "'s` `" + methodName + "` method writes every part of the Account to the file!", user1.getEmail(), user2.getEmail());
+                    Assert.assertEquals("Ensure that `" + className + "'s` `" + methodName + "` method writes every part of the Account to the file!", user1.getPhoneNumber(), user2.getPhoneNumber());
+                    Assert.assertEquals("Ensure that `" + className + "'s` `" + methodName + "` method writes every part of the Account to the file!", user1.getBio(), user2.getBio());
+                    Assert.assertEquals("Ensure that `" + className + "'s` `" + methodName + "` method writes every part of the Account to the file!", user1.getInterests(), user2.getInterests());
+                }
+            } catch (FileNotFoundException e) {
+                Assert.fail("Ensure that `" + className + "'s` `" + methodName + "` method writes to a file named `allUsers.txt`");
+            } catch (IOException e) {
+                Assert.fail("Something messed up pretty bad lmao");
+            } catch (ClassNotFoundException e) {
+                Assert.fail("Ensure the Manager class exists i think.");
+            }
+        }
+
+        @Test(timeout = 1000)
+        public void managerSaveToFileFunctionTest02() {
+            Manager m = new Manager();
+
+            String methodName = "saveToFile";
+            String className = "Manager";
+
+            m.saveToFile();
+
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("allUsers.txt")))) {
+                ArrayList<Account> accountList;
+                Object obj = ois.readObject();
+                if (obj instanceof ArrayList) {
+                    accountList = (ArrayList<Account>) obj;
+                    ArrayList<Account> allUsers = m.getAllUsers();
+
+                    Assert.assertEquals("Ensure that `" + className + "'s` `" + methodName + "` method writes an empty list to the file if no users have been added!", allUsers.size(), accountList.size());
+                }
+            } catch (FileNotFoundException e) {
+                Assert.fail("Ensure that `" + className + "'s` `" + methodName + "` method writes to a file named `allUsers.txt`");
+            } catch (IOException e) {
+                Assert.fail("Something messed up pretty bad lmao");
+            } catch (ClassNotFoundException e) {
+                Assert.fail("Ensure the Manager class exists i think.");
+            }
+        }
+        
         // End Manager Method Testing
 
         // End Manager Class Testing
