@@ -2766,7 +2766,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `"+ className +"` extends `Object`!", Object.class, superclass);
             Assert.assertEquals("Ensure that `"+ className +"` implements only 0 interfaces!", 0, superinterfaces.length);
         }
-        
+
         // Begin Server Field Testing
         @Test(timeout = 1000)
         public void serverReaderFieldTest() {
@@ -2888,12 +2888,244 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
         // End Server Field Testing
-        
+
         // End Server Testing
 
 
         // Begin ServerThread Testing
-        // TODO: Actually add ServerThread Tests
+        @Test(timeout = 1000)
+        public void serverThreadClassDeclarationTest() {
+            Class<?> clazz;
+            String className;
+            int modifiers;
+            Class<?> superclass;
+            Class<?>[] superinterfaces;
+
+            // Set the class being tested
+            clazz = ServerThread.class;
+            className = "ServerThread";
+
+            // Testing
+
+            modifiers = clazz.getModifiers();
+            superclass = clazz.getSuperclass();
+            superinterfaces = clazz.getInterfaces();
+
+            Assert.assertTrue("Ensure that `"+ className +"` is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `"+ className +"` is NOT `abstract`!", Modifier.isAbstract(modifiers));
+            Assert.assertEquals("Ensure that `"+ className +"` extends `Thread`!", Thread.class, superclass);
+            Assert.assertEquals("Ensure that `"+ className +"` implements only 0 interfaces!", 0, superinterfaces.length);
+        }
+
+        // Begin ServerThread Field Testing
+        @Test(timeout = 1000)
+        public void serverThreadSocketFieldTest() {
+            Class<?> clazz;
+            String className = "ServerThread";
+            Field testField;
+            int modifiers;
+            Class<?> type;
+
+            // Set the field that you want to test
+            String fieldName = "socket";
+
+            // Set the type of the field you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedType = Socket.class;
+
+            // Set the class being tested
+            clazz = ServerThread.class;
+
+            // Attempt to access the class field
+            try {
+                testField = clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = testField.getModifiers();
+
+            type = testField.getType();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
+        }
+
+        @Test(timeout = 1000)
+        public void serverThreadManagerFieldTest() {
+            Class<?> clazz;
+            String className = "ServerThread";
+            Field testField;
+            int modifiers;
+            Class<?> type;
+
+            // Set the field that you want to test
+            String fieldName = "manager";
+
+            // Set the type of the field you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedType = Manager.class;
+
+            // Set the class being tested
+            clazz = ServerThread.class;
+
+            // Attempt to access the class field
+            try {
+                testField = clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = testField.getModifiers();
+
+            type = testField.getType();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
+        }
+
+        @Test(timeout = 1000)
+        public void serverThreadReaderFieldTest() {
+            Class<?> clazz;
+            String className = "ServerThread";
+            Field testField;
+            int modifiers;
+            Class<?> type;
+
+            // Set the field that you want to test
+            String fieldName = "reader";
+
+            // Set the type of the field you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedType = ObjectInputStream.class;
+
+            // Set the class being tested
+            clazz = ServerThread.class;
+
+            // Attempt to access the class field
+            try {
+                testField = clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = testField.getModifiers();
+
+            type = testField.getType();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
+        }
+
+        @Test(timeout = 1000)
+        public void serverThreadWriterFieldTest() {
+            Class<?> clazz;
+            String className = "ServerThread";
+            Field testField;
+            int modifiers;
+            Class<?> type;
+
+            // Set the field that you want to test
+            String fieldName = "writer";
+
+            // Set the type of the field you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedType = ObjectOutputStream.class;
+
+            // Set the class being tested
+            clazz = ServerThread.class;
+
+            // Attempt to access the class field
+            try {
+                testField = clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = testField.getModifiers();
+
+            type = testField.getType();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
+        }
+        // End ServerThread Field Testing
+
+        // Begin ServerThread Method Testing
+        @Test(timeout = 1000)
+        public void serverThreadRunMethodTest() {
+            Class<?> clazz;
+            String className = "ServerThread";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "run";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = void.class;
+
+            // Set the class being tested
+            clazz = ServerThread.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has 0 parameters!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+        // End ServerThread Method Testing
+
         // End ServerThread Testing
 
 
