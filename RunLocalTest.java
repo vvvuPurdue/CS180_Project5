@@ -1042,9 +1042,9 @@ public class RunLocalTest {
 
             String methodName = "setEmail";
             String className = "Account";
-            String testInput = "email2";
+            String testInput = "email2@email.com";
 
-            acc.setPassword(testInput);
+            acc.setEmail(testInput);
 
             Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the email correctly!", testInput, acc.getEmail());
         }
@@ -1054,11 +1054,11 @@ public class RunLocalTest {
             Account acc = new Account("username", "password", "email@email.com", "1234567890",
                     "bio", "interests");
 
-            String methodName = "setPassword";
+            String methodName = "setEmail";
             String className = "Account";
             String testInput = null;
 
-            acc.setPassword(testInput);
+            acc.setEmail(testInput);
 
             Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method sets the email correctly!", acc.getEmail());
         }
@@ -1108,7 +1108,7 @@ public class RunLocalTest {
         }
 
         @Test(timeout = 1000)
-        public void accountSetPasswordFunctionTest01() {
+        public void accountSetPhoneNumberFunctionTest01() {
             Account acc = new Account("username", "password", "email@email.com", "1234567890",
                     "bio", "interests");
 
@@ -1116,9 +1116,9 @@ public class RunLocalTest {
             String className = "Account";
             String testInput = "2222222222";
 
-            acc.setPassword(testInput);
+            acc.setPhoneNumber(testInput);
 
-            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the phone number correctly!", testInput, acc.getPhoneNumber()));
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the phone number correctly!", testInput, acc.getPhoneNumber());
         }
 
         @Test(timeout = 1000)
@@ -1130,7 +1130,7 @@ public class RunLocalTest {
             String className = "Account";
             String testInput = null;
 
-            acc.setPassword(testInput);
+            acc.setPhoneNumber(testInput);
 
             Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method sets the phone number correctly!", acc.getPhoneNumber());
         }
@@ -1188,7 +1188,7 @@ public class RunLocalTest {
             String className = "Account";
             String testInput = "bio2";
 
-            acc.setPassword(testInput);
+            acc.setBio(testInput);
 
             Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the bio correctly!", testInput, acc.getBio());
         }
@@ -1202,7 +1202,7 @@ public class RunLocalTest {
             String className = "Account";
             String testInput = null;
 
-            acc.setPassword(testInput);
+            acc.setBio(testInput);
 
             Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method sets the bio correctly!", acc.getBio());
         }
@@ -1260,7 +1260,7 @@ public class RunLocalTest {
             String className = "Account";
             String testInput = "interests2";
 
-            acc.setPassword(testInput);
+            acc.setInterests(testInput);
 
             Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method sets the interests correctly!", testInput, acc.getInterests());
         }
@@ -1274,7 +1274,7 @@ public class RunLocalTest {
             String className = "Account";
             String testInput = null;
 
-            acc.setPassword(testInput);
+            acc.setInterests(testInput);
 
             Assert.assertNull("Ensure `" + className + "'s` `" + methodName + "` method sets the interests correctly!", acc.getInterests());
         }
@@ -1861,12 +1861,12 @@ public class RunLocalTest {
 
             acc1.sendFriendRequest(acc2);
 
-            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns 1 if the request has been accepted successfully", 1,  acc2.acceptDeclineFriendRequest(acc1, true));
+            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns 1 if the request has been accepted successfully!", 1,  acc2.acceptDeclineFriendRequest(acc1, true));
 
             acc1.removeFriend(acc2);
             acc1.sendFriendRequest(acc2);
 
-            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns 1 if the request has been declined successfully", 1,  acc2.acceptDeclineFriendRequest(acc1, false));
+            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns 1 if the request has been declined successfully!", 1,  acc2.acceptDeclineFriendRequest(acc1, false));
         }
 
         @Test(timeout = 1000)
@@ -1876,12 +1876,12 @@ public class RunLocalTest {
             Account acc2 = new Account("username2", "password2", "email2@email.com", "2222222222",
                     "bio2", "interests2");
 
-            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns -1 if accepting a non-existent request", -1,  acc2.acceptDeclineFriendRequest(acc1, true));
-            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns -1 if declining a non-existent request", -1,  acc2.acceptDeclineFriendRequest(acc1, false));
+            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns -1 if accepting a non-existent request!", -1,  acc2.acceptDeclineFriendRequest(acc1, true));
+            Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns -1 if declining a non-existent request!", -1,  acc2.acceptDeclineFriendRequest(acc1, false));
             try {
-                Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns -1 if accepting/declining a request from a null user", -1, acc2.acceptDeclineFriendRequest(null, true));
+                Assert.assertEquals("Ensure that `Account's` `acceptDeclineFriendRequest` method returns -1 if accepting/declining a request from a null user!", -1, acc2.acceptDeclineFriendRequest(null, true));
             } catch (NullPointerException e) {
-                Assert.fail("Ensure that `Account'` `acceptDeclineFriendRequest` method does not throw a NullPointerException when receiving a null user");
+                Assert.fail("Ensure that `Account'` `acceptDeclineFriendRequest` method does not throw a NullPointerException when receiving a null user!");
             }
         }
 
@@ -1938,7 +1938,7 @@ public class RunLocalTest {
                     "bio2", "interests2");
 
             acc1.sendFriendRequest(acc2);
-            acc2.acceptDeclineFriendRequest(acc1, false);
+            acc2.acceptDeclineFriendRequest(acc1, true);
 
             Assert.assertEquals("Ensure that `Account's` `removeFriend` method returns 1 if it successfully removes a friend!", 1, acc1.removeFriend(acc2));
         }
@@ -2005,6 +2005,163 @@ public class RunLocalTest {
         // End Account Method Testing
 
         // End Account Class Testing
+
+
+
+        // Begin Manager Class Testing
+        @Test(timeout = 1000)
+        public void managerClassDeclarationTest() {
+            Class<?> clazz;
+            String className;
+            int modifiers;
+            Class<?> superclass;
+            Class<?>[] superinterfaces;
+
+            // Set the class being tested
+            clazz = Manager.class;
+            className = "Manager";
+
+            // Testing
+
+            modifiers = clazz.getModifiers();
+            superclass = clazz.getSuperclass();
+            superinterfaces = clazz.getInterfaces();
+
+            Assert.assertTrue("Ensure that `"+ className +"` is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `"+ className +"` is NOT `abstract`!", Modifier.isAbstract(modifiers));
+            Assert.assertEquals("Ensure that `"+ className +"` extends `Object`!", Object.class, superclass);
+            Assert.assertEquals("Ensure that `"+ className +"` implements only 0 interfaces!", 0, superinterfaces.length);
+        }
+
+        // Begin Manager Field Testing
+        @Test(timeout = 1000)
+        public void ManagerAllUsersFieldTest() {
+            Class<?> clazz;
+            String className = "Manager";
+            Field testField;
+            int modifiers;
+            Class<?> type;
+
+            // Set the field that you want to test
+            String fieldName = "allUsers";
+
+            // Set the type of the field you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedType = ArrayList.class;
+
+            // Set the class being tested
+            clazz = Manager.class;
+
+            // Attempt to access the class field
+            try {
+                testField = clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = testField.getModifiers();
+
+            type = testField.getType();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
+        }
+        // End Manager Field Testing
+
+        // Begin Manager Method Testing
+        @Test(timeout = 1000)
+        public void managerGetAllUsersMethodTest() {
+            Class<?> clazz;
+            String className = "Manager";
+            Method method;
+            int modifiers;
+            Class<?> actualReturnType;
+            int expectedLength = 0;
+            Class<?>[] exceptions;
+
+            // Set the method that you want to test
+            String methodName = "getAllUsers";
+
+            // Set the return type of the method you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedReturnType = ArrayList.class;
+
+            // Set the class being tested
+            clazz = Manager.class;
+
+            // Attempt to access the class method
+            try {
+                method = clazz.getDeclaredMethod(methodName);
+            } catch (NoSuchMethodException e) {
+                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
+                        " has no parameters!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = method.getModifiers();
+
+            actualReturnType = method.getReturnType();
+
+            exceptions = method.getExceptionTypes();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
+        }
+
+        @Test(timeout = 1000)
+        public void managerGetAllUsersFunctionTest01() {
+            Manager m = new Manager();
+
+            String methodName = "getAllUsers";
+            String className = "Manager";
+            ArrayList<Account> testList = new ArrayList<>();
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns an empty list before adding an users!", testList, m.getAllUsers());
+        }
+
+        @Test(timeout = 1000)
+        public void managerGetAllUsersFunctionTest02() {
+            Manager m = new Manager();
+
+            String methodName = "getAllUsers";
+            String className = "Manager";
+
+            m.createAccount("username1", "password1", "email1@email.com", "1111111111",
+                    "bio1", "interests1");
+            m.createAccount("username2", "password2", "email2@email.com", "2222222222",
+                    "bio2", "interests2");
+
+            Assert.assertEquals("Ensure `" + className + "'s` `" + methodName + "` method returns an empty list before adding an users!", 2, m.getAllUsers().size());
+        }
+
+        // TODO: Finish Manager Method Tests
+        // End Manager Method Testing
+
+        // End Manager Class Testing
+
+
+
+        // Begin Server Testing
+        // TODO: Actually add Server Tests
+        // End Server Testing
+
+
+        // Begin ServerThread Testing
+        // TODO: Actually add ServerThread Tests
+        // End ServerThread Testing
 
 
 
