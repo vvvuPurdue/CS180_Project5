@@ -2743,7 +2743,152 @@ public class RunLocalTest {
 
 
         // Begin Server Testing
-        // TODO: Actually add Server Tests
+        @Test(timeout = 1000)
+        public void serverClassDeclarationTest() {
+            Class<?> clazz;
+            String className;
+            int modifiers;
+            Class<?> superclass;
+            Class<?>[] superinterfaces;
+
+            // Set the class being tested
+            clazz = Server.class;
+            className = "Server";
+
+            // Testing
+
+            modifiers = clazz.getModifiers();
+            superclass = clazz.getSuperclass();
+            superinterfaces = clazz.getInterfaces();
+
+            Assert.assertTrue("Ensure that `"+ className +"` is `public`!", Modifier.isPublic(modifiers));
+            Assert.assertFalse("Ensure that `"+ className +"` is NOT `abstract`!", Modifier.isAbstract(modifiers));
+            Assert.assertEquals("Ensure that `"+ className +"` extends `Object`!", Object.class, superclass);
+            Assert.assertEquals("Ensure that `"+ className +"` implements only 0 interfaces!", 0, superinterfaces.length);
+        }
+        
+        // Begin Server Field Testing
+        @Test(timeout = 1000)
+        public void serverReaderFieldTest() {
+            Class<?> clazz;
+            String className = "Server";
+            Field testField;
+            int modifiers;
+            Class<?> type;
+
+            // Set the field that you want to test
+            String fieldName = "reader";
+
+            // Set the type of the field you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedType = ObjectInputStream.class;
+
+            // Set the class being tested
+            clazz = Server.class;
+
+            // Attempt to access the class field
+            try {
+                testField = clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = testField.getModifiers();
+
+            type = testField.getType();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
+        }
+
+        @Test(timeout = 1000)
+        public void serverWriterFieldTest() {
+            Class<?> clazz;
+            String className = "Server";
+            Field testField;
+            int modifiers;
+            Class<?> type;
+
+            // Set the field that you want to test
+            String fieldName = "writer";
+
+            // Set the type of the field you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedType = PrintWriter.class;
+
+            // Set the class being tested
+            clazz = Server.class;
+
+            // Attempt to access the class field
+            try {
+                testField = clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = testField.getModifiers();
+
+            type = testField.getType();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
+        }
+
+        @Test(timeout = 1000)
+        public void serverObjectWriterFieldTest() {
+            Class<?> clazz;
+            String className = "Server";
+            Field testField;
+            int modifiers;
+            Class<?> type;
+
+            // Set the field that you want to test
+            String fieldName = "objectWriter";
+
+            // Set the type of the field you want to test
+            // Use the type + .class
+            // For example, String.class or int.class
+            Class<?> expectedType = ObjectOutputStream.class;
+
+            // Set the class being tested
+            clazz = Server.class;
+
+            // Attempt to access the class field
+            try {
+                testField = clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
+
+                return;
+            } //end try catch
+
+            // Perform tests
+
+            modifiers = testField.getModifiers();
+
+            type = testField.getType();
+
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
+            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
+            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `static`!", Modifier.isStatic(modifiers));
+            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
+        }
+        // End Server Field Testing
+        
         // End Server Testing
 
 
