@@ -444,7 +444,7 @@ public class NewClient {
                 panel.add(editProfile);
                 panel.add(deleteAccountButton);
             } else {
-                // if it is anothe user, allow the ability to view their friends
+                // if it is another user, allow the ability to view their friends
                 JAButton viewFriends = new JAButton("View Friends", username, Action.ViewFriends);
                 viewFriends.addActionListener(actionListener);
                 panel.add(viewFriends);
@@ -477,7 +477,7 @@ public class NewClient {
                                         panel.add(acceptFriendRequest);
                                         panel.add(declineFriendRequest);
                                     } else {
-                                        // else, we know that they havent requested us, and we havent requested them
+                                        // else, we know that they haven't requested us, and we haven't requested them
                                         JAButton requestFriend = new JAButton("Send Friend Request", username, Action.SendFriendRequest);
                                         requestFriend.addActionListener(actionListener);
                                         panel.add(requestFriend);
@@ -646,6 +646,7 @@ public class NewClient {
                 friendRequestsPanel.setBorder(padding);
                 friendRequestsPanel.setLayout(new BoxLayout(friendRequestsPanel, BoxLayout.Y_AXIS));
                 JLabel friendRequestsHeader = new JLabel("Friend Requests", SwingConstants.CENTER);
+                friendRequestsHeader.setFont(subTitleFont);
                 friendRequestsPanel.add(friendRequestsHeader, BorderLayout.NORTH);
                 if (user.getFriendRequests().size() != 0) {
                     for (Account friendRequest : user.getFriendRequests()) {
@@ -665,6 +666,7 @@ public class NewClient {
                 requestedFriendsPanel.setBorder(padding);
                 requestedFriendsPanel.setLayout(new BoxLayout(requestedFriendsPanel, BoxLayout.Y_AXIS));
                 JLabel requestedFriendHeader = new JLabel("Requested Friends", SwingConstants.CENTER);
+                requestedFriendHeader.setFont(subTitleFont);
                 requestedFriendsPanel.add(requestedFriendHeader, BorderLayout.NORTH);
                 if (user.getRequestedFriends().size() != 0) {
                     for (Account requestedFriend : user.getRequestedFriends()) {
@@ -741,7 +743,7 @@ public class NewClient {
         Object response[] = sendToServer(new String[] { "searchUsers", searchWord });
         String status = (String) response[0];
         if (status.equals("success")) {
-            // If there are results, show them. Otherewise, no results, show a simple message
+            // If there are results, show them. Otherwise, no results, show a simple message
             ArrayList<Account> users = (ArrayList<Account>) response[1];
             if (users.size() != 0) {
                 // setting up the window, layout, and padding
