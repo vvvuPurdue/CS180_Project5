@@ -1,6 +1,8 @@
 package frontend;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -26,7 +28,9 @@ public class NewClient {
     private static String usernameToShow;
 
     // gui constants
-    private static final Font titleFont = new Font("Arial", 1, 18);
+    private static final Font titleFont = new Font("Arial", 1, 20);
+    private static final Font subTitleFont = new Font("Arial", 1, 15);
+    private static final EmptyBorder padding = new EmptyBorder(10, 10, 10, 10);
 
     // edit account fields
     private static JTextField phoneNumberTxtField;
@@ -37,27 +41,42 @@ public class NewClient {
     private static JTextField oldPasswordTxtField;
     private static JTextField newPasswordTxtField;
 
+    // defines the button actions
+    public static enum Action {
+        ViewProfile, ViewFriends,
+        EditAccount, UpdateAccount, DeleteAccount,
+        SendFriendRequest, CancelFriendRequest,
+        AcceptFriendRequest, DeclineFriendRequest,
+        RemoveFriend, SearchFriends,
+    }
+
     /*
-        * There are several actions that we can listen to:
-        * View Profile : show profile menu and display the user info
-        * 
+        * There are several actions that we can perform after we listen
+        * The action is based on the Action enum
     */
     public static ActionListener actionListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() instanceof JButton) {
-                String action = (String) ((JButton) e.getSource()).getText();
-                switch (action) {
-                    case "View Profile":
+            if (e.getSource() instanceof JAButton) {
+                // We are using the button's text to determine the action required
+                JAButton source = (JAButton) e.getSource();
+                Action buttonAction = source.getActionType();
+                switch (buttonAction) {
+                    case ViewProfile:
                         // if view profile button was pressed, show profile window
-                        showProfile(currentUser);
+                        showProfile(source.getAccountName());
                         break;
-                    case "Edit Account":
+                    case ViewFriends:
+                        // if view friends button was pressed, show friends list window
+                        showFriendsList(source.getAccountName());
+                        break;
+                    case EditAccount:
                         // if edit profile button was pressed, show profile window for this current user
                         showEditProfile();
                         break;
-                    case "Save Changes":
+                    case UpdateAccount:
                         // if saved changes button was pressed, send new info request to server
                         Object[] response;
+                        // if old password, new password, and new username are blank, that means we're not updating them
                         if (oldPasswordTxtField.getText().equals("")
                             && newPasswordTxtField.getText().equals("")
                             && newUsernameTxtField.getText().equals("")
@@ -65,19 +84,20 @@ public class NewClient {
                             String[] request = new String[] {
                                 "updateAccount", currentUser.getUsername(),
                                 emailTxtField.getText(), phoneNumberTxtField.getText(),
-                                bioTxtField.getText(), phoneNumberTxtField.getText()
+                                bioTxtField.getText(), interestsTxtField.getText()
                             };
                             response = ClientRequest.sendToServer(request);
                         } else {
+                            // else, if they are not blank, we are updating them
                             String[] request = new String[] {
                                 "updateAccount", currentUser.getUsername(),
                                 emailTxtField.getText(), phoneNumberTxtField.getText(),
-                                bioTxtField.getText(), phoneNumberTxtField.getText(),
+                                bioTxtField.getText(), interestsTxtField.getText(),
                                 oldPasswordTxtField.getText(), newUsernameTxtField.getText(), newPasswordTxtField.getText()
                             };
                             response = ClientRequest.sendToServer(request);
                         }
-                        // check to see if successful
+                        // check status code to see if successful, and show appropriate messages
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
@@ -217,10 +237,12 @@ public class NewClient {
         header.setFont(titleFont);
         content.add(header, BorderLayout.NORTH);
         // create new buttons
-        JButton profileMenuButton = new JButton("View Profile");
+        JAButton profileMenuButton = new JAButton("View Profile", currentUser.getUsername(), Action.ViewProfile);
         profileMenuButton.addActionListener(actionListener);
-        JButton friendMenuButton = new JButton("View Friends");
-        JButton searchMenuButton = new JButton ("Search for Users");
+        JAButton friendMenuButton = new JAButton("View Friends", currentUser.getUsername(), Action.ViewFriends);
+        friendMenuButton.addActionListener(actionListener);
+        JAButton searchMenuButton = new JAButton ("Search for Users", Action.SearchFriends);
+        searchMenuButton.addActionListener(actionListener);
         // adding new buttons to new panel, then add to menu
         JPanel mainMenuPanel = new JPanel();
         mainMenuPanel.add(profileMenuButton);
@@ -236,51 +258,69 @@ public class NewClient {
         mainMenu.setVisible(true);
     }
 
-    public static void showProfile(Account user) {
-        System.out.println("Viewing " + user.getUsername() + " profile...");
-        JFrame profileWindow = new JFrame();
-        Container content = profileWindow.getContentPane();
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+    /*
+        * Shows a user's profile in a new window
+        * If this user is the currentUser, allow editProfile abilities
+        * Else, if it is a different user, allow the ability to view their friends request them
+    */
+    public static void showProfile(String usernameToShow) {
+        Object[] response = ClientRequest.sendToServer(new String[] { "getUser", usernameToShow });
+        String status = (String) response[0];
+        if (status.equals("success")) {
+            Account user = (Account) response[1];
+            JFrame profileWindow = new JFrame();
+            Container content = profileWindow.getContentPane();
+            content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        JLabel header = new JLabel("Profile of: " + user.getUsername(), SwingConstants.CENTER);
-        header.setFont(titleFont);
-        content.add(header, BorderLayout.NORTH);
-        content.add(Box.createVerticalStrut(10));
+            JLabel header = new JLabel("Profile of: " + user.getUsername(), SwingConstants.CENTER);
+            header.setFont(titleFont);
+            content.add(header, BorderLayout.NORTH);
+            content.add(Box.createVerticalStrut(10));
 
-        JLabel username = new JLabel("Username: " + user.getUsername(), SwingConstants.CENTER);
-        JLabel email = new JLabel("Email: " + user.getEmail(), SwingConstants.CENTER);
-        JLabel phoneNumber = new JLabel("Phone Number: " + user.getPhoneNumber(), SwingConstants.CENTER);
-        JLabel bio = new JLabel("Biography: " + user.getBio(), SwingConstants.CENTER);
-        JLabel interests = new JLabel("Interests: " + user.getInterests(), SwingConstants.CENTER);
-        content.add(username);
-        content.add(Box.createVerticalStrut(10));
-        content.add(email);
-        content.add(Box.createVerticalStrut(10));
-        content.add(phoneNumber);
-        content.add(Box.createVerticalStrut(10));
-        content.add(bio);
-        content.add(Box.createVerticalStrut(10));
-        content.add(interests);
+            JLabel username = new JLabel("Username: " + user.getUsername(), SwingConstants.CENTER);
+            JLabel email = new JLabel("Email: " + user.getEmail(), SwingConstants.CENTER);
+            JLabel phoneNumber = new JLabel("Phone Number: " + user.getPhoneNumber(), SwingConstants.CENTER);
+            JLabel bio = new JLabel("Biography: " + user.getBio(), SwingConstants.CENTER);
+            JLabel interests = new JLabel("Interests: " + user.getInterests(), SwingConstants.CENTER);
+            content.add(username);
+            content.add(Box.createVerticalStrut(10));
+            content.add(email);
+            content.add(Box.createVerticalStrut(10));
+            content.add(phoneNumber);
+            content.add(Box.createVerticalStrut(10));
+            content.add(bio);
+            content.add(Box.createVerticalStrut(10));
+            content.add(interests);
 
-        if (user.equals(currentUser)) {
-            JButton editProfile = new JButton("Edit Account");
-            editProfile.addActionListener(actionListener);
-            JButton deleteAccountButton = new JButton("Delete Account");
-            content.add(editProfile);
-            content.add(deleteAccountButton);
+            if (usernameToShow.equals(currentUser.getUsername())) {
+                JAButton editProfile = new JAButton("Edit Account", Action.EditAccount);
+                editProfile.addActionListener(actionListener);
+                JAButton deleteAccountButton = new JAButton("Delete Account", Action.DeleteAccount);
+                deleteAccountButton.addActionListener(actionListener);
+                content.add(editProfile);
+                content.add(deleteAccountButton);
+            } else {
+                JAButton viewFriends = new JAButton("View Friends", usernameToShow, Action.ViewFriends);
+                viewFriends.addActionListener(actionListener);
+                content.add(viewFriends);
+            }
+
+            profileWindow.setTitle("Profile Menu");
+            profileWindow.setSize(600, 1000);
+            profileWindow.setLocationRelativeTo(null);
+            profileWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            profileWindow.pack();
+            profileWindow.setVisible(true);
         } else {
-            JButton viewFriends = new JButton("View Friends");
-            content.add(viewFriends);
+            JOptionPane.showMessageDialog(null, "Username " + usernameToShow + " could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        profileWindow.setTitle("Profile Menu");
-        profileWindow.setSize(600, 1000);
-        profileWindow.setLocationRelativeTo(null);
-        profileWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        profileWindow.pack();
-        profileWindow.setVisible(true);
     }
 
+    /*
+        * Shows the window to edit current user's profile
+        * Note: this only allows the user to edit ONLY their own profile
+        * unlike the other functions that can display for different users
+    */
     public static void showEditProfile() {
         JFrame editProfile = new JFrame();
         Container content = editProfile.getContentPane();
@@ -352,7 +392,7 @@ public class NewClient {
         content.add(Box.createVerticalStrut(10));
 
         JPanel saveButtonPanel = new JPanel(new BorderLayout());
-        JButton saveChangesButton = new JButton("Save Changes");
+        JAButton saveChangesButton = new JAButton("Save Changes", Action.UpdateAccount);
         saveChangesButton.addActionListener(actionListener);
         saveButtonPanel.add(saveChangesButton, BorderLayout.CENTER);
         content.add(saveButtonPanel);
@@ -363,5 +403,92 @@ public class NewClient {
         editProfile.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         editProfile.pack();
         editProfile.setVisible(true);
+    }
+
+    /*
+        Friends list window shows a list of the user's current friends,
+        friend requests, and requested friends
+    */
+    public static void showFriendsList(String username) {
+        Object[] response = ClientRequest.sendToServer(new String[] { "getUser", username });
+        String status = (String) response[0];
+        if (status.equals("success")) {
+            Account user = (Account) response[1];
+            JFrame friendsList = new JFrame();
+            Container content = friendsList.getContentPane();
+            content.setLayout(new BorderLayout());
+
+            JLabel header = new JLabel("Friends List of " + username, SwingConstants.CENTER);
+            header.setFont(titleFont);
+            content.add(header, BorderLayout.NORTH);
+
+            // displaying all the current friends
+            JPanel currentFriendsPanel = new JPanel();
+            currentFriendsPanel.setBorder(padding);
+            currentFriendsPanel.setLayout(new BoxLayout(currentFriendsPanel, BoxLayout.Y_AXIS));
+            JLabel friendsHeader = new JLabel("Friends", SwingConstants.CENTER);
+            currentFriendsPanel.add(friendsHeader, BorderLayout.NORTH);
+            if (user.getFriends().size() != 0) {
+                for (Account friend : user.getFriends()) {
+                    JAButton friendButton = new JAButton(friend.getUsername(), friend.getUsername(),
+                            Action.ViewProfile);
+                    friendButton.addActionListener(actionListener);
+                    currentFriendsPanel.add(friendButton, BorderLayout.CENTER);
+                }
+            } else {
+                JLabel emptyList = new JLabel("You currently have no friends :(");
+                currentFriendsPanel.add(emptyList);
+            }
+
+            // displaying all friend requests
+            JPanel friendRequestsPanel = new JPanel();
+            friendRequestsPanel.setBorder(padding);
+            friendRequestsPanel.setLayout(new BoxLayout(friendRequestsPanel, BoxLayout.Y_AXIS));
+            JLabel friendRequestsHeader = new JLabel("Friend Requests", SwingConstants.CENTER);
+            friendRequestsPanel.add(friendRequestsHeader, BorderLayout.NORTH);
+            if (user.getFriendRequests().size() != 0) {
+                for (Account friendRequest : user.getFriendRequests()) {
+                    JAButton friendButton = new JAButton(friendRequest.getUsername(), friendRequest.getUsername(),
+                            Action.ViewProfile);
+                    friendButton.addActionListener(actionListener);
+                    friendRequestsPanel.add(friendButton, BorderLayout.CENTER);
+                }
+            } else {
+                JLabel emptyList = new JLabel("You currently have no incoming friend requests.");
+                friendRequestsPanel.add(emptyList);
+            }
+
+            // displaying all requested friends
+            JPanel requestedFriendsPanel = new JPanel();
+            requestedFriendsPanel.setBorder(padding);
+            requestedFriendsPanel.setLayout(new BoxLayout(requestedFriendsPanel, BoxLayout.Y_AXIS));
+            JLabel requestedFriendHeader = new JLabel("Requested Friends", SwingConstants.CENTER);
+            requestedFriendsPanel.add(requestedFriendHeader, BorderLayout.NORTH);
+            if (user.getRequestedFriends().size() != 0) {
+                for (Account requestedFriend : user.getRequestedFriends()) {
+                    JAButton friendButton = new JAButton(requestedFriend.getUsername(), requestedFriend.getUsername(),
+                            Action.ViewProfile);
+                    friendButton.addActionListener(actionListener);
+                    requestedFriendsPanel.add(friendButton, BorderLayout.CENTER);
+                }
+            } else {
+                JLabel emptyList = new JLabel("You currently have no outgoing friend requests.");
+                requestedFriendsPanel.add(emptyList);
+            }
+
+            // adding all the panels to window
+            content.add(currentFriendsPanel, BorderLayout.WEST);
+            content.add(friendRequestsPanel, BorderLayout.CENTER);
+            content.add(requestedFriendsPanel, BorderLayout.EAST);
+
+            friendsList.setTitle("Friends List");
+            friendsList.setSize(600, 700);
+            friendsList.setLocationRelativeTo(null);
+            friendsList.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            friendsList.pack();
+            friendsList.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Username " + usernameToShow + " could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
