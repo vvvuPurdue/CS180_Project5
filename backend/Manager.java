@@ -82,13 +82,15 @@ public class Manager {
         if (i != -1) {
             if (newUsername.contains(" ")) {
                 return -1;
-            } else if (findUser(newUsername) != -1) {
+            } else if (findUser(newUsername) != -1 && !newUsername.equals(username)) {
                 return -2;
             } else if (currentPassword.equals(allUsers.get(i).getPassword())) {
                 allUsers.get(i).setEmail(email);
                 allUsers.get(i).setPhoneNumber(phoneNumber);
                 allUsers.get(i).setBio(bio);
                 allUsers.get(i).setInterests(interests);
+                allUsers.get(i).setUsername(newUsername);
+                allUsers.get(i).setPassword(newPassword);
                 return 1;
             }
             return -3;

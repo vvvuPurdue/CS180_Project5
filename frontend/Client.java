@@ -450,6 +450,7 @@ public class Client {
     }
 
     // method to open window to view other account's profile
+    // TODO: view friends in profile
     public static void viewProfile(String username) throws IOException, ClassNotFoundException {
         Account account = getUser(username);
         JFrame profile = new JFrame();
