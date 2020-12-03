@@ -15,7 +15,7 @@ import javax.swing.*;
 public class JAButton extends JButton {
     
     private String accountName;
-    private final NewClient.Action action;
+    private NewClient.Action action;
 
     public JAButton(String text, NewClient.Action action) {
         super(text);
@@ -34,5 +34,9 @@ public class JAButton extends JButton {
 
     public NewClient.Action getActionType() {
         return this.action;
+    }
+
+    public void setActionType(NewClient.Action action) {
+        this.action = action;
     }
 }

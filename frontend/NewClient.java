@@ -61,19 +61,19 @@ public class NewClient {
                 JAButton source = (JAButton) e.getSource();
                 Action buttonAction = source.getActionType();
                 switch (buttonAction) {
-                    case ViewProfile:
+                    case ViewProfile -> {
                         // if view profile button was pressed, show profile window
                         showProfile(source.getAccountName());
-                        break;
-                    case ViewFriends:
+                    }
+                    case ViewFriends -> {
                         // if view friends button was pressed, show friends list window
                         showFriendsList(source.getAccountName());
-                        break;
-                    case EditAccount:
+                    }
+                    case EditAccount -> {
                         // if edit profile button was pressed, show profile window for this current user
                         showEditProfile();
-                        break;
-                    case UpdateAccount:
+                    }
+                    case UpdateAccount -> {
                         // if saved changes button was pressed, send new info request to server
                         Object[] response;
                         // if old password, new password, and new username are blank, that means we're not updating them
@@ -105,22 +105,29 @@ public class NewClient {
                                 JOptionPane.showMessageDialog(null, "Changes have been successfully saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
                                 break;
                             case "usernameNotFound":
-                                JOptionPane.showMessageDialog(null, "Username could not be found!", "User Error!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Username could not be found!", "Error!", JOptionPane.ERROR_MESSAGE);
                                 break;
                             case "incorrectPassword":
-                                JOptionPane.showMessageDialog(null, "Password was not correct!", "Password Error!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Password was not correct!", "Error!", JOptionPane.ERROR_MESSAGE);
                                 break;
                             case "usernameExists":
-                                JOptionPane.showMessageDialog(null, "Username already exists!", "User Error!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Username already exists!", "Error!", JOptionPane.ERROR_MESSAGE);
                                 break;
                             case "invalidUsername":
-                                JOptionPane.showMessageDialog(null, "Username is invalid!", "User Error!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Username is invalid!", "Error!", JOptionPane.ERROR_MESSAGE);
                                 break;
                             case "emptyFields":
-                                JOptionPane.showMessageDialog(null, "Account information cannot be empty!", "Account Error!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Account information cannot be empty!", "Error!", JOptionPane.ERROR_MESSAGE);
                                 break;
                         }
-                        break;
+                    }
+                    case DeleteAccount -> {
+                        int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete your account? This cannot be undone.", "Delete Account?", JOptionPane.YES_NO_OPTION);
+                        if (confirm == JOptionPane.YES_OPTION) {
+                            ClientRequest.sendToServer(new String[] { "deleteAccount", currentUser.getUsername(), currentUser.getPassword() });
+                            System.exit(1);
+                        }
+                    }
                 }
             }
         }
@@ -270,41 +277,48 @@ public class NewClient {
             Account user = (Account) response[1];
             JFrame profileWindow = new JFrame();
             Container content = profileWindow.getContentPane();
-            content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+            JPanel panel = new JPanel();
+            panel.setBorder(padding);
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
             JLabel header = new JLabel("Profile of: " + user.getUsername(), SwingConstants.CENTER);
             header.setFont(titleFont);
-            content.add(header, BorderLayout.NORTH);
-            content.add(Box.createVerticalStrut(10));
+            panel.add(header, BorderLayout.NORTH);
+            panel.add(Box.createVerticalStrut(10));
 
             JLabel username = new JLabel("Username: " + user.getUsername(), SwingConstants.CENTER);
             JLabel email = new JLabel("Email: " + user.getEmail(), SwingConstants.CENTER);
             JLabel phoneNumber = new JLabel("Phone Number: " + user.getPhoneNumber(), SwingConstants.CENTER);
             JLabel bio = new JLabel("Biography: " + user.getBio(), SwingConstants.CENTER);
             JLabel interests = new JLabel("Interests: " + user.getInterests(), SwingConstants.CENTER);
-            content.add(username);
-            content.add(Box.createVerticalStrut(10));
-            content.add(email);
-            content.add(Box.createVerticalStrut(10));
-            content.add(phoneNumber);
-            content.add(Box.createVerticalStrut(10));
-            content.add(bio);
-            content.add(Box.createVerticalStrut(10));
-            content.add(interests);
+            panel.add(username);
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(email);
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(phoneNumber);
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(bio);
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(interests);
+            panel.add(Box.createVerticalStrut(10));
 
             if (usernameToShow.equals(currentUser.getUsername())) {
                 JAButton editProfile = new JAButton("Edit Account", Action.EditAccount);
                 editProfile.addActionListener(actionListener);
                 JAButton deleteAccountButton = new JAButton("Delete Account", Action.DeleteAccount);
                 deleteAccountButton.addActionListener(actionListener);
-                content.add(editProfile);
-                content.add(deleteAccountButton);
+                panel.add(editProfile);
+                panel.add(deleteAccountButton);
             } else {
                 JAButton viewFriends = new JAButton("View Friends", usernameToShow, Action.ViewFriends);
                 viewFriends.addActionListener(actionListener);
-                content.add(viewFriends);
+                JAButton requestFriend = new JAButton("Send Friend Request", usernameToShow, Action.SendFriendRequest);
+                requestFriend.addActionListener(actionListener);
+                panel.add(viewFriends);
+                panel.add(requestFriend);
             }
 
+            content.add(panel);
             profileWindow.setTitle("Profile Menu");
             profileWindow.setSize(600, 1000);
             profileWindow.setLocationRelativeTo(null);
