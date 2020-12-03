@@ -1,8 +1,9 @@
 package frontend;
 
+import java.io.*;
+import java.net.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -19,7 +20,16 @@ import backend.Account;
 */
 
 public class NewClient {
-    
+
+    // io declaration
+    private static Socket socket;
+    private static ObjectOutputStream writer;
+    private static ObjectInputStream reader;
+
+    // server connection constants
+    private static final String serverHost = "localhost";
+    private static final int serverPort = 4242;
+
     // storing the current client signed in on client side
     private static Account currentUser;
 
@@ -88,7 +98,7 @@ public class NewClient {
                                 emailTxtField.getText(), phoneNumberTxtField.getText(),
                                 bioTxtField.getText(), interestsTxtField.getText()
                             };
-                            response = ClientRequest.sendToServer(request);
+                            response = sendToServer(request);
                         } else {
                             // else, if they are not blank, we are updating password and username
                             // send a request to include everything
@@ -98,7 +108,7 @@ public class NewClient {
                                 bioTxtField.getText(), interestsTxtField.getText(),
                                 oldPasswordTxtField.getText(), newUsernameTxtField.getText(), newPasswordTxtField.getText()
                             };
-                            response = ClientRequest.sendToServer(request);
+                            response = sendToServer(request);
                         }
                         // check status code to see if successful, and show appropriate messages
                         String status = (String) response[0];
@@ -132,7 +142,7 @@ public class NewClient {
                     case DeleteAccount -> {
                         int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete your account? This cannot be undone.", "Delete Account?", JOptionPane.YES_NO_OPTION);
                         if (confirm == JOptionPane.YES_OPTION) {
-                            String status = (String) ClientRequest.sendToServer(new String[] { "deleteAccount", currentUser.getUsername(), currentUser.getPassword() })[0];
+                            String status = (String) sendToServer(new String[] { "deleteAccount", currentUser.getUsername(), currentUser.getPassword() })[0];
                             switch (status) {
                                 case "success":
                                     JOptionPane.showMessageDialog(null, "Account successfully delete! Program will close now...", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -146,7 +156,7 @@ public class NewClient {
                     // If user pressed the friend request button, do a server request,
                     // where we send a friend request from the current user to the account linked to the JAButton. 
                     case SendFriendRequest -> {
-                        Object[] response = ClientRequest.sendToServer(new String[] { "sendFriendRequest", currentUser.getUsername(), source.getAccountName() });
+                        Object[] response = sendToServer(new String[] { "sendFriendRequest", currentUser.getUsername(), source.getAccountName() });
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
@@ -164,7 +174,7 @@ public class NewClient {
                     // If user pressed the cancel friend request button, do a server request,
                     // where we cancel a friend request sent from current user to the account linked to the JAButton.
                     case CancelFriendRequest -> {
-                        Object[] response = ClientRequest.sendToServer(new String[] { "cancelFriendRequest", currentUser.getUsername(), source.getAccountName() });
+                        Object[] response = sendToServer(new String[] { "cancelFriendRequest", currentUser.getUsername(), source.getAccountName() });
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
@@ -181,7 +191,7 @@ public class NewClient {
                     }
                     // If user pressed the accept friend request button, do a server request, and check status
                     case AcceptFriendRequest -> {
-                        Object[] response = ClientRequest.sendToServer(new String[] { "acceptFriendRequest", currentUser.getUsername(), source.getAccountName() });
+                        Object[] response = sendToServer(new String[] { "acceptFriendRequest", currentUser.getUsername(), source.getAccountName() });
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
@@ -198,7 +208,7 @@ public class NewClient {
                     }
                     // If user pressed the decline friend request button, do a server request. Check status
                     case DeclineFriendRequest -> {
-                        Object[] response = ClientRequest.sendToServer(new String[] { "declineFriendRequest", currentUser.getUsername(), source.getAccountName() });
+                        Object[] response = sendToServer(new String[] { "declineFriendRequest", currentUser.getUsername(), source.getAccountName() });
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
@@ -215,7 +225,7 @@ public class NewClient {
                     }
                     // If user pressed the remove friend request button, do a server request. Check status
                     case RemoveFriend -> {
-                        Object[] response = ClientRequest.sendToServer(new String[] { "removeFriend", currentUser.getUsername(), source.getAccountName() });
+                        Object[] response = sendToServer(new String[] { "removeFriend", currentUser.getUsername(), source.getAccountName() });
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
@@ -287,7 +297,7 @@ public class NewClient {
         String password = JOptionPane.showInputDialog(null, "Password", JOptionPane.QUESTION_MESSAGE);
         // if user clicked cancel, return to start menu
         if (password == null) return false;
-        Object[] response = ClientRequest.sendToServer(new String[] { "loginUser", username, password });
+        Object[] response = sendToServer(new String[] { "loginUser", username, password });
         String status = (String) response[0];
         switch (status) {
             case "success":
@@ -328,7 +338,7 @@ public class NewClient {
         if (interests == null) return false;
 
         String[] accountInfo = { "createAccount", username, password, email, phone, bio, interests };
-        Object[] response = ClientRequest.sendToServer(accountInfo);
+        Object[] response = sendToServer(accountInfo);
         String status = (String) response[0];
         switch (status) {
             case "success":
@@ -393,7 +403,7 @@ public class NewClient {
         * Else, if it is a different user, allow the ability to view their friends request them
     */
     public static void showProfile(String username) {
-        Object[] response = ClientRequest.sendToServer(new String[] { "getUser", username });
+        Object[] response = sendToServer(new String[] { "getUser", username });
         String status = (String) response[0];
         if (status.equals("success")) {
             Account user = (Account) response[1];
@@ -439,7 +449,7 @@ public class NewClient {
                 panel.add(viewFriends);
                 // also add ability to remove friend or send/cancel/accept/decline friend requests
                 // first check if we are friends with them
-                Object[] isFriendsResponse = ClientRequest.sendToServer(new String[] { "isFriendsWith", currentUser.getUsername(), username });
+                Object[] isFriendsResponse = sendToServer(new String[] { "isFriendsWith", currentUser.getUsername(), username });
                 String isFriendsStatus = (String) isFriendsResponse[0];
                 if (isFriendsStatus.equals("success")) {
                     // if we are friends with them, add option to remove the friend
@@ -449,13 +459,13 @@ public class NewClient {
                         panel.add(removeFriend);
                     } else {
                         // if we're not friends with them, check if we have requested user or if we are friends with them, 
-                        Object[] hasRequestedResponse = ClientRequest.sendToServer(new String[] { "hasRequested", currentUser.getUsername(), username });
+                        Object[] hasRequestedResponse = sendToServer(new String[] { "hasRequested", currentUser.getUsername(), username });
                         String hasRequestedStatus = (String) hasRequestedResponse[0];
                         if (hasRequestedStatus.equals("success")) {
                             // if we have not requested them, first check if they have requested us
                             if (!(boolean) hasRequestedResponse[1]) {
                                 // check if they have requested us, in which we show "Accept" or "Decline"
-                                hasRequestedResponse = ClientRequest.sendToServer(new String[] { "hasRequested", username, currentUser.getUsername() });
+                                hasRequestedResponse = sendToServer(new String[] { "hasRequested", username, currentUser.getUsername() });
                                 hasRequestedStatus = (String) hasRequestedResponse[0];
                                 if (hasRequestedStatus.equals("success")) {
                                     if ((boolean) hasRequestedResponse[1]) {
@@ -597,7 +607,7 @@ public class NewClient {
         friend requests, and requested friends
     */
     public static void showFriendsList(String username) {
-        Object[] response = ClientRequest.sendToServer(new String[] { "getUser", username });
+        Object[] response = sendToServer(new String[] { "getUser", username });
         String status = (String) response[0];
         if (status.equals("success")) {
             Account user = (Account) response[1];
@@ -682,6 +692,9 @@ public class NewClient {
         }
     }
 
+    /*
+        Window to show the search bar and search button, but NOT the search results
+    */
     public static void showSearchMenu() {
         // initial setup, layout, and padding
         JFrame searchMenu = new JFrame();
@@ -720,8 +733,11 @@ public class NewClient {
         searchMenu.setVisible(true);
     }
 
+    /*
+        Window to show the search results (comes after user has pressed the search button)
+    */
     public static void showSearchResults(String searchWord) {
-        Object response[] = ClientRequest.sendToServer(new String[] { "searchUsers", searchWord });
+        Object response[] = sendToServer(new String[] { "searchUsers", searchWord });
         String status = (String) response[0];
         if (status.equals("success")) {
             // If there are results, show them. Otherewise, no results, show a simple message
@@ -767,5 +783,38 @@ public class NewClient {
     // shown whenever we are unable to connect to the server
     public static void showConnectionError() {
         JOptionPane.showMessageDialog(null, "Could not connect to server!", "Connection Error!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // try to send data. If connection failed, return connectionFailed status code
+    public static Object[] sendToServer(Object[] request) {
+        try {
+            socket = new Socket(serverHost, serverPort);
+            writer = new ObjectOutputStream(socket.getOutputStream());
+            reader = new ObjectInputStream(socket.getInputStream());
+
+            writer.writeObject(request);
+            Object[] response = (Object[]) reader.readObject();
+
+            socket.close();
+            reader.close();
+            writer.close();
+            return response;
+        } catch (UnknownHostException e) {
+            return new String[] { "connectionFailed" };
+        } catch (IOException e) {
+            return new String[] { "connectionFailed" };
+        } catch (ClassNotFoundException e) {
+            return new String[] { "connectionFailed" };
+        } finally {
+            try {
+                socket.close();
+                reader.close();
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
