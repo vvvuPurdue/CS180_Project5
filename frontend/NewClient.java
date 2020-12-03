@@ -18,6 +18,8 @@ import backend.Account;
     * @version November 26, 2020
 */
 
+// TODO: add handling in case server goes down on ALL methods
+
 public class NewClient {
     
     // storing the current client signed in on client side
@@ -128,6 +130,34 @@ public class NewClient {
                             System.exit(1);
                         }
                     }
+                    case SendFriendRequest -> {
+                        Object[] response = ClientRequest.sendToServer(new String[] { "sendFriendRequest", currentUser.getUsername(), source.getAccountName() });
+                        String status = (String) response[0];
+                        switch (status) {
+                            case "success":
+                                currentUser = (Account) response[1];
+                                JOptionPane.showMessageDialog(null, "Friend request sent!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                break;
+                            default:
+                                JOptionPane.showMessageDialog(null, "Unable to send friend request", "Error", JOptionPane.INFORMATION_MESSAGE);
+                                break;
+                        }
+                    }
+                    case CancelFriendRequest -> {
+
+                    }
+                    case AcceptFriendRequest -> {
+
+                    }
+                    case DeclineFriendRequest -> {
+
+                    }
+                    case RemoveFriend -> {
+
+                    }
+                    case SearchFriends -> {
+
+                    }
                 }
             }
         }
@@ -184,7 +214,7 @@ public class NewClient {
                 JOptionPane.showMessageDialog(null, "Incorrect Password", "Password Error!", JOptionPane.ERROR_MESSAGE);
                 break;
             case "connectionFailed":
-                JOptionPane.showMessageDialog(null, "Could not connect to server!", "Connection Error!", JOptionPane.ERROR_MESSAGE);
+                showConnectionError();
                 break;
         }
         return false;
@@ -224,6 +254,9 @@ public class NewClient {
                 break;
             case "emptyFields":
                 JOptionPane.showMessageDialog(null, "You must fill every field to create an account", "User Error!", JOptionPane.ERROR_MESSAGE);
+                break;
+            case "connectionFailed":
+                showConnectionError();
                 break;
         }
         return false;
@@ -312,10 +345,56 @@ public class NewClient {
             } else {
                 JAButton viewFriends = new JAButton("View Friends", usernameToShow, Action.ViewFriends);
                 viewFriends.addActionListener(actionListener);
-                JAButton requestFriend = new JAButton("Send Friend Request", usernameToShow, Action.SendFriendRequest);
-                requestFriend.addActionListener(actionListener);
                 panel.add(viewFriends);
-                panel.add(requestFriend);
+                // first check if we are friends with them
+                Object[] isFriendsResponse = ClientRequest.sendToServer(new String[] { "isFriendsWith", currentUser.getUsername(), usernameToShow });
+                String isFriendsStatus = (String) isFriendsResponse[0];
+                if (isFriendsStatus.equals("success")) {
+                    // if we are friends with them, add option to remove the friend
+                    if ((boolean) isFriendsResponse[1]) {
+                        JAButton removeFriend = new JAButton("Remove Friend", Action.RemoveFriend);
+                        removeFriend.addActionListener(actionListener);
+                        panel.add(removeFriend);
+                    } else {
+                        // since, we're not friends with them, check if we have requested user or if we are friends with them, 
+                        Object[] hasRequestedResponse = ClientRequest.sendToServer(new String[] { "hasRequested", currentUser.getUsername(), usernameToShow });
+                        String hasRequestedStatus = (String) hasRequestedResponse[0];
+                        if (hasRequestedStatus.equals("success")) {
+                            // if we have not requested them, first check if they have requested us
+                            if (!(boolean) hasRequestedResponse[1]) {
+                                // check if they have requested us, in which we show "Accept" or "Decline"
+                                hasRequestedResponse = ClientRequest.sendToServer(new String[] { "hasRequested", usernameToShow, currentUser.getUsername() });
+                                hasRequestedStatus = (String) hasRequestedResponse[0];
+                                if (hasRequestedStatus.equals("success")) {
+                                    if ((boolean) hasRequestedResponse[1]) {
+                                        JAButton acceptFriendRequest = new JAButton("Accept Friend Request", Action.AcceptFriendRequest);
+                                        acceptFriendRequest.addActionListener(actionListener);
+                                        JAButton declineFriendRequest = new JAButton("Decline Friend Request", Action.DeclineFriendRequest);
+                                        declineFriendRequest.addActionListener(actionListener);
+                                        panel.add(acceptFriendRequest);
+                                        panel.add(declineFriendRequest);
+                                    } else {
+                                        // else, we know that they havent requested us, and we havent requested them
+                                        JAButton requestFriend = new JAButton("Send Friend Request", usernameToShow, Action.SendFriendRequest);
+                                        requestFriend.addActionListener(actionListener);
+                                        panel.add(requestFriend);
+                                    }
+                                } else {
+                                    showConnectionError();
+                                }
+                            } else {
+                                // if we have requested, give option to cancel request
+                                JAButton cancelRequest = new JAButton("Cancel Friend Request", usernameToShow, Action.CancelFriendRequest);
+                                cancelRequest.addActionListener(actionListener);
+                                panel.add(cancelRequest);
+                            }
+                        } else {
+                            showConnectionError();
+                        }
+                    }
+                } else  {
+                    showConnectionError();
+                }
             }
 
             content.add(panel);
@@ -453,47 +532,48 @@ public class NewClient {
                 JLabel emptyList = new JLabel("You currently have no friends :(");
                 currentFriendsPanel.add(emptyList);
             }
-
-            // displaying all friend requests
-            JPanel friendRequestsPanel = new JPanel();
-            friendRequestsPanel.setBorder(padding);
-            friendRequestsPanel.setLayout(new BoxLayout(friendRequestsPanel, BoxLayout.Y_AXIS));
-            JLabel friendRequestsHeader = new JLabel("Friend Requests", SwingConstants.CENTER);
-            friendRequestsPanel.add(friendRequestsHeader, BorderLayout.NORTH);
-            if (user.getFriendRequests().size() != 0) {
-                for (Account friendRequest : user.getFriendRequests()) {
-                    JAButton friendButton = new JAButton(friendRequest.getUsername(), friendRequest.getUsername(),
-                            Action.ViewProfile);
-                    friendButton.addActionListener(actionListener);
-                    friendRequestsPanel.add(friendButton, BorderLayout.CENTER);
-                }
-            } else {
-                JLabel emptyList = new JLabel("You currently have no incoming friend requests.");
-                friendRequestsPanel.add(emptyList);
-            }
-
-            // displaying all requested friends
-            JPanel requestedFriendsPanel = new JPanel();
-            requestedFriendsPanel.setBorder(padding);
-            requestedFriendsPanel.setLayout(new BoxLayout(requestedFriendsPanel, BoxLayout.Y_AXIS));
-            JLabel requestedFriendHeader = new JLabel("Requested Friends", SwingConstants.CENTER);
-            requestedFriendsPanel.add(requestedFriendHeader, BorderLayout.NORTH);
-            if (user.getRequestedFriends().size() != 0) {
-                for (Account requestedFriend : user.getRequestedFriends()) {
-                    JAButton friendButton = new JAButton(requestedFriend.getUsername(), requestedFriend.getUsername(),
-                            Action.ViewProfile);
-                    friendButton.addActionListener(actionListener);
-                    requestedFriendsPanel.add(friendButton, BorderLayout.CENTER);
-                }
-            } else {
-                JLabel emptyList = new JLabel("You currently have no outgoing friend requests.");
-                requestedFriendsPanel.add(emptyList);
-            }
-
-            // adding all the panels to window
             content.add(currentFriendsPanel, BorderLayout.WEST);
-            content.add(friendRequestsPanel, BorderLayout.CENTER);
-            content.add(requestedFriendsPanel, BorderLayout.EAST);
+
+            if (username.equals(currentUser.getUsername())) {
+                // displaying all friend requests
+                JPanel friendRequestsPanel = new JPanel();
+                friendRequestsPanel.setBorder(padding);
+                friendRequestsPanel.setLayout(new BoxLayout(friendRequestsPanel, BoxLayout.Y_AXIS));
+                JLabel friendRequestsHeader = new JLabel("Friend Requests", SwingConstants.CENTER);
+                friendRequestsPanel.add(friendRequestsHeader, BorderLayout.NORTH);
+                if (user.getFriendRequests().size() != 0) {
+                    for (Account friendRequest : user.getFriendRequests()) {
+                        JAButton friendButton = new JAButton(friendRequest.getUsername(), friendRequest.getUsername(),
+                                Action.ViewProfile);
+                        friendButton.addActionListener(actionListener);
+                        friendRequestsPanel.add(friendButton, BorderLayout.CENTER);
+                    }
+                } else {
+                    JLabel emptyList = new JLabel("You currently have no incoming friend requests.");
+                    friendRequestsPanel.add(emptyList);
+                }
+                content.add(friendRequestsPanel, BorderLayout.CENTER);
+
+                // displaying all requested friends
+                JPanel requestedFriendsPanel = new JPanel();
+                requestedFriendsPanel.setBorder(padding);
+                requestedFriendsPanel.setLayout(new BoxLayout(requestedFriendsPanel, BoxLayout.Y_AXIS));
+                JLabel requestedFriendHeader = new JLabel("Requested Friends", SwingConstants.CENTER);
+                requestedFriendsPanel.add(requestedFriendHeader, BorderLayout.NORTH);
+                if (user.getRequestedFriends().size() != 0) {
+                    for (Account requestedFriend : user.getRequestedFriends()) {
+                        JAButton friendButton = new JAButton(requestedFriend.getUsername(), requestedFriend.getUsername(),
+                                Action.ViewProfile);
+                        friendButton.addActionListener(actionListener);
+                        requestedFriendsPanel.add(friendButton, BorderLayout.CENTER);
+                    }
+                } else {
+                    JLabel emptyList = new JLabel("You currently have no outgoing friend requests.");
+                    requestedFriendsPanel.add(emptyList);
+                }
+                content.add(requestedFriendsPanel, BorderLayout.EAST);
+            }
+            
 
             friendsList.setTitle("Friends List");
             friendsList.setSize(600, 700);
@@ -504,5 +584,9 @@ public class NewClient {
         } else {
             JOptionPane.showMessageDialog(null, "Username " + usernameToShow + " could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public static void showConnectionError() {
+        JOptionPane.showMessageDialog(null, "Could not connect to server!", "Connection Error!", JOptionPane.ERROR_MESSAGE);
     }
 }
