@@ -117,6 +117,7 @@ public class Client {
                         switch (status) {
                             case "success":
                                 currentUser = (Account) response[1];
+                                // System.out.println(currentUser.getUsername());
                                 JOptionPane.showMessageDialog(null, "Changes have been successfully saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
                                 break;
                             case "usernameNotFound":
@@ -250,12 +251,8 @@ public class Client {
                     // once the user has pressed the search button, show the results
                     case SearchUsers -> {
                         String searchWord = searchField.getText();
-                        if (!searchWord.equals("")) {
-                            showSearchResults(searchField.getText());
-                            searchField.setText("");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Search field cannot be blank!", "Error", JOptionPane.INFORMATION_MESSAGE);
-                        }
+                        showSearchResults(searchField.getText());
+                        searchField.setText("");
                     }
                 }
             }
@@ -368,34 +365,52 @@ public class Client {
         JFrame mainMenu = new JFrame();
         Container content = mainMenu.getContentPane();
         content.setLayout(new BorderLayout());
-
         // creating title
         JLabel header = new JLabel("Logged in as: " + currentUser.getUsername(), SwingConstants.CENTER);
         header.setFont(titleFont);
         content.add(header, BorderLayout.NORTH);
-
         // create new buttons
         JAButton profileMenuButton = new JAButton("View Profile", currentUser.getUsername(), Action.ViewProfile);
-        profileMenuButton.addActionListener(actionListener);
         JAButton friendMenuButton = new JAButton("View Friends", currentUser.getUsername(), Action.ViewFriends);
-        friendMenuButton.addActionListener(actionListener);
         JAButton searchMenuButton = new JAButton ("Search for Users", Action.ViewSearchMenu);
+        profileMenuButton.addActionListener(actionListener);
+        friendMenuButton.addActionListener(actionListener);
         searchMenuButton.addActionListener(actionListener);
-        
         // adding new buttons to new panel, then add to menu
         JPanel mainMenuPanel = new JPanel();
         mainMenuPanel.add(profileMenuButton);
         mainMenuPanel.add(friendMenuButton);
         mainMenuPanel.add(searchMenuButton);
         content.add(mainMenuPanel, BorderLayout.CENTER);
-        
         // after adding everything, finally show menu
         mainMenu.setTitle("Main Menu");
         mainMenu.setSize(600, 400);
         mainMenu.setLocationRelativeTo(null);
         mainMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainMenu.pack();
         mainMenu.setVisible(true);
+
+        // continuosly keep this window updated (in case account info was updated)
+        new Thread(() -> {
+            while (mainMenu.isVisible()) {
+                // check to see if our current user was updated/edited, and update header and buttons
+                Object[] response = sendToServer(new String[] { "getUser", currentUser.getUsername() });
+                String status = (String) response[0];
+                if (status.equals("success")) {
+                    currentUser = (Account) response[1];
+                    header.setText("Logged in as: " + currentUser.getUsername());
+                    profileMenuButton.setAccountName(currentUser.getUsername());
+                    friendMenuButton.setAccountName(currentUser.getUsername());
+                }
+                mainMenuPanel.revalidate();
+                mainMenuPanel.repaint();
+                mainMenu.pack();
+                try {
+                    Thread.sleep(refreshRate);
+                } catch (InterruptedException e) {
+                    System.out.println("interrupted");
+                }
+            }
+        }).start();
     }
 
     /*
@@ -795,7 +810,7 @@ public class Client {
         JPanel searchBarPanel = new JPanel();
         searchBarPanel.setBorder(padding);
         searchBarPanel.setLayout(new BoxLayout(searchBarPanel, BoxLayout.X_AXIS));
-        JLabel searchTitle = new JLabel("Enter username to search:");
+        JLabel searchTitle = new JLabel("Enter username to search, or leave blank to list all users:");
         searchField = new JTextField("", 15);
         JAButton searchButton = new JAButton("Search", Action.SearchUsers);
         searchButton.addActionListener(actionListener);
@@ -880,50 +895,6 @@ public class Client {
                 }
             }
         }).start();
-    }
-
-    public static void showSearchResults2(String searchWord) {
-        Object response[] = sendToServer(new String[] { "searchUsers", searchWord });
-        String status = (String) response[0];
-        if (status.equals("success")) {
-            // If there are results, show them. Otherwise, no results, show a simple message
-            ArrayList<Account> users = (ArrayList<Account>) response[1];
-            if (users.size() != 0) {
-                // setting up the window, layout, and padding
-                JFrame resultsWindow = new JFrame();
-                Container content = resultsWindow.getContentPane();
-                JPanel panel = new JPanel();
-                panel.setBorder(padding);
-                panel.setLayout(new BorderLayout());
-                // setting up title
-                JLabel header = new JLabel("Search Results for: " + searchWord, SwingConstants.CENTER);
-                header.setFont(titleFont);
-                panel.add(header, BorderLayout.NORTH);
-                // setting up grid panel to display users
-                JPanel resultsPanel = new JPanel();
-                resultsPanel.setBorder(padding);
-                resultsPanel.setLayout(new GridLayout(0, 4));
-                // display all users
-                for (Account user : users) {
-                    JAButton userButton = new JAButton(user.getUsername(), user.getUsername(), Action.ViewProfile);
-                    userButton.addActionListener(actionListener);
-                    resultsPanel.add(userButton);
-                }
-                panel.add(resultsPanel, BorderLayout.CENTER);
-                // showing window
-                content.add(panel);
-                resultsWindow.setTitle("Search Results");
-                resultsWindow.setSize(600, 400);
-                resultsWindow.setLocationRelativeTo(null);
-                resultsWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                resultsWindow.pack();
-                resultsWindow.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "No users found!", "Search Results", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } else {
-            showConnectionError();
-        }
     }
 
     // shown whenever we are unable to connect to the server
