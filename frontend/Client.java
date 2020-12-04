@@ -13,7 +13,8 @@ import backend.Account;
 /**
     * Client class
     *
-    * Manages logic of client
+    * Manages logic of client, shows appropriate GUIs,
+    * and makes requests to server
     *
     * @author Team 15-3 CS 180 - Merge
     * @version November 26, 2020
@@ -681,6 +682,7 @@ public class Client {
         friendsList.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         friendsList.setVisible(true);
 
+        // continuously refresh the content of window until it is closed
         new Thread(() -> {
             while (friendsList.isVisible()) {
                 Object[] response = sendToServer(new String[] { "getUser", username });
@@ -815,9 +817,72 @@ public class Client {
     }
 
     /*
-        Window to show the search results (comes after user has pressed the search button)
+        * Window to show the search results (comes after user has pressed the search button)
+        * Has real time updates (based on refresh rate)
     */
     public static void showSearchResults(String searchWord) {
+        // setting up the window, layout, and padding
+        JFrame resultsWindow = new JFrame();
+        Container content = resultsWindow.getContentPane();
+        JPanel panel = new JPanel();
+        panel.setBorder(padding);
+        panel.setLayout(new BorderLayout());
+        // setting up title
+        JLabel header = new JLabel("Search Results for: " + searchWord, SwingConstants.CENTER);
+        header.setFont(titleFont);
+        panel.add(header, BorderLayout.NORTH);
+        // setting up grid panel to display users
+        JPanel resultsPanel = new JPanel();
+        resultsPanel.setBorder(padding);
+        resultsPanel.setLayout(new GridLayout(0, 4));
+        panel.add(resultsPanel, BorderLayout.CENTER);
+        // showing window
+        content.add(panel);
+        resultsWindow.setTitle("Search Results");
+        resultsWindow.setSize(600, 400);
+        resultsWindow.setLocationRelativeTo(null);
+        resultsWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        resultsWindow.setVisible(true);
+
+        // continuously refresh the content of window until it is closed
+        new Thread(() -> {
+            while (resultsWindow.isVisible()) {
+                Object response[] = sendToServer(new String[] { "searchUsers", searchWord });
+                String status = (String) response[0];
+                if (status.equals("success")) {
+                    // clear previous results
+                    resultsPanel.removeAll();
+                    ArrayList<Account> users = (ArrayList<Account>) response[1];
+                    // If there are results, show them. Otherwise, no results, show a simple message
+                    if (users.size() > 0) {
+                        // display all users
+                        for (Account user : users) {
+                            JAButton userButton = new JAButton(user.getUsername(), user.getUsername(), Action.ViewProfile);
+                            userButton.addActionListener(actionListener);
+                            resultsPanel.add(userButton);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No users found!", "Search Results", JOptionPane.INFORMATION_MESSAGE);
+                        resultsWindow.setVisible(false);
+                    }
+                    resultsPanel.revalidate();
+                    resultsPanel.repaint();
+                    resultsWindow.pack();
+                } else {
+                    showConnectionError();
+                    resultsWindow.setVisible(false);
+                }
+                // delay refresh by refreshRate (in milliseconds)
+                try {
+                    Thread.sleep(refreshRate);
+                } catch (InterruptedException e) {
+                    System.out.println("interrupted");
+                }
+            }
+        }).start();
+    }
+
+    public static void showSearchResults2(String searchWord) {
         Object response[] = sendToServer(new String[] { "searchUsers", searchWord });
         String status = (String) response[0];
         if (status.equals("success")) {
