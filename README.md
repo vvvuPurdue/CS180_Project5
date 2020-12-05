@@ -67,5 +67,12 @@
 		bio, String interests, String currentPassword, String newUsername, String newPassword. Returns -1 for an invalid username, -2 if the new username exists, -3 if
 		the password is incorrect and -4 if the username wasn't found.
 	* deleteAccount
-		* 
-	
+		* Removes a certain user from the database. Returns 1 if successful, -1 if password is incorrect and -2 if the username isn't found.
+	* searchUsers
+		* Filler Text
+	* findUser
+		* Finds a user account by username. Returns index in the database if found and -1 if not found.
+	* saveToFile
+		* Saves everything to allUsers.txt.
+* **Server Class:**
+	* This class
