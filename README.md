@@ -51,4 +51,9 @@
 * **Manager Class:**
 	* This class acts as a database for storing all accounts and manages retrieval of of specific accounts. Serves as the backbone of the backend.
 	* Constructor
-		* 
+		* Reads in allUsers.txt file and if the file doesn't exist, creates a new file callde allUsers.txt.
+	* getAllUsers
+		* Gets all the users.
+	* getUser
+		* Gets one specific user.
+	
