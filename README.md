@@ -56,4 +56,16 @@
 		* Gets all the users.
 	* getUser
 		* Gets one specific user.
+	* createAccount
+		* Creates a new account given the parameters String username, String password, String email, String phoneNumber, String bio, String interests. After creation,
+		the account is added to the database and also checks for duplicate accounts. Returns 1 if successful, -1 for an invalid username and -2 for duplicate username.
+	* updateAccount
+		* Goes into the database and updates the account information for a user when given the following parameters: String username, String email, String phoneNumber,
+		String bio, String interests. Returns 1 if succcessful and -1 if the username couldn't be found.
+	* updateAccount (overload)
+		* An alternate version of updateAccount that overloads the method to use different set of paramenters: String username, String email, String phoneNumber, String
+		bio, String interests, String currentPassword, String newUsername, String newPassword. Returns -1 for an invalid username, -2 if the new username exists, -3 if
+		the password is incorrect and -4 if the username wasn't found.
+	* deleteAccount
+		* 
 	
