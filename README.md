@@ -75,4 +75,8 @@
 	* saveToFile
 		* Saves everything to allUsers.txt.
 * **Server Class:**
-	* This class
+	* This class handles the creation of the server and sessions so that multiple clients can connect with the server. It also handles authentication and client requests,
+	think of this class as the control room of the whole application.
+	* main
+		* Creates the server and starts the manager class (database). Also handles creation of multiple sessions for clients to interact with the server.
+
