@@ -1,7 +1,7 @@
 # CS180 Project5
 ## Team 15-3
 
-**Account Class:**
+* **Account Class:**
 	* This class is called to hold information regarding any info in a user's account.
   	* Constructor
     	* The constructor sets parameters equal to private variables in the class and also initializes 3 Account arrayLists. Parameters include String username, String password,
@@ -48,7 +48,7 @@
 		* Removes friend from list and unfriends the person. 1 returned if successful and -1 else.
 	* userInList
 		* Helps find a certain user in a list. Index in the list is returned if the user exists and else, -1 is returned.
-**Manager Class:**
+* **Manager Class:**
 	* This class acts as a database for storing all accounts and manages retrieval of of specific accounts. Serves as the backbone of the backend.
 	* Constructor
 		* 
