@@ -69,7 +69,7 @@
 	* deleteAccount
 		* Removes a certain user from the database. Returns 1 if successful, -1 if password is incorrect and -2 if the username isn't found.
 	* searchUsers
-		* Filler Text
+		* Finds related users in database given a search String.
 	* findUser
 		* Finds a user account by username. Returns index in the database if found and -1 if not found.
 	* saveToFile
