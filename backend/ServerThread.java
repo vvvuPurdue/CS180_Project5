@@ -49,7 +49,7 @@ public class ServerThread extends Thread {
             // first check if any fields are empty. If they are, no need to continue
             boolean fieldsEmpty = false;
             for (String field : requestBody) {
-                if (field.length() == 0) {
+                if (field.length() == 0 && !requestType.equals("searchUsers")) {
                     sendData("emptyFields");
                     fieldsEmpty = true;
                     break;
@@ -84,7 +84,7 @@ public class ServerThread extends Thread {
                             int updateStatus = manager.updateAccount(requestBody[1], requestBody[2], requestBody[3],
                                     requestBody[4], requestBody[5], requestBody[6], requestBody[7], requestBody[8]);
                             if (updateStatus == 1) {
-                                sendData("success", manager.getUser(requestBody[1]));
+                                sendData("success", manager.getUser(requestBody[7]));
                             } else if (updateStatus == -1) {
                                 sendData("invalidUsername");
                             } else if (updateStatus == -2) {

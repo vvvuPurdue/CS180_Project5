@@ -83,16 +83,15 @@ public class Manager {
         if (i != -1) {
             if (newUsername.contains(" ")) {
                 return -1;
-            } else if (findUser(newUsername) != -1) {
+            } else if (findUser(newUsername) != -1 && !newUsername.equals(username)) {
                 return -2;
             } else if (currentPassword.equals(allUsers.get(i).getPassword())) {
-                Account user = allUsers.get(i);
-                user.setUsername(newUsername);
-                user.setPassword(newPassword);
-                user.setEmail(email);
-                user.setPhoneNumber(phoneNumber);
-                user.setBio(bio);
-                user.setInterests(interests);
+                allUsers.get(i).setEmail(email);
+                allUsers.get(i).setPhoneNumber(phoneNumber);
+                allUsers.get(i).setBio(bio);
+                allUsers.get(i).setInterests(interests);
+                allUsers.get(i).setUsername(newUsername);
+                allUsers.get(i).setPassword(newPassword);
                 return 1;
             }
             return -3;
@@ -107,6 +106,18 @@ public class Manager {
         int i = findUser(username);
         if (i != -1 ) {
             if (allUsers.get(i).getPassword().equals(password)) {
+                // remove this account from all friend lists
+                for (int x = allUsers.get(i).getFriends().size() - 1; x >= 0; x--) {
+                    allUsers.get(i).getFriends().get(x).removeFriend(allUsers.get(i));
+                }
+                // remove all friend requests sent to this user
+                for (int x = allUsers.get(i).getFriendRequests().size() - 1; x >= 0; x--) {
+                    allUsers.get(i).getFriendRequests().get(x).cancelFriendRequest(allUsers.get(i));
+                }
+                // remove all friend requests sent by this user
+                for (int x = allUsers.get(i).getRequestedFriends().size() - 1; x >= 0; x--) {
+                    allUsers.get(i).cancelFriendRequest(allUsers.get(i).getRequestedFriends().get(x));
+                }
                 allUsers.remove(i);
                 return 1;
             }
