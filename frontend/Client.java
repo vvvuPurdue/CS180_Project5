@@ -84,7 +84,7 @@ public class Client {
                     // if view friends button was pressed, show friends list window
                     // based on what account the button is linked to
                     case ViewFriends -> {
-                        new Thread(() -> showFriendsList(source.getAccountName())).start();
+                        showFriendsList(source.getAccountName());
                     }
                     // if edit profile button was pressed, show profile window. Can only be shown for current user
                     case EditAccount -> {
@@ -255,7 +255,6 @@ public class Client {
                     }
                     // once the user has pressed the search button, show the results
                     case SearchUsers -> {
-                        String searchWord = searchField.getText();
                         showSearchResults(searchField.getText());
                         searchField.setText("");
                     }
@@ -557,7 +556,8 @@ public class Client {
                     }
                     profileWindow.pack();
                 } else if (status.equals("usernameNotFound")) {
-                    JOptionPane.showMessageDialog(null, "Username " + username + " could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
+                    
+                    JOptionPane.showMessageDialog(null, "Username " + username + " could no longer be found!", "Error", JOptionPane.ERROR_MESSAGE);
                     profileWindow.setVisible(false);
                 } else {
                     showConnectionError();
