@@ -90,4 +90,17 @@
 	* sendData
 		* Is an overloaded method to sendData; sends data and a status update.
 * **Action Button Class:**
+	* Filler Text
+	* Constructor
+		* Filler Text
+	* getAccount
+		* Gets the account.
+	* setAccount
+		* Sets the account.
+	* getActionType
+		* Gets the action type.
+* **Username Button Class:**
+	* Filler Text
+	* Constructor
+		* Filler Text
 	*
