@@ -104,5 +104,15 @@
 	* setActionType
 		* Sets the action type.
 * **Client Class:**
-	*
-	
+	* Allows the user to interact with the application. Shows appropriate GUIs for each interaction, manages the client logic, and makes requests to the server.
+	* actionPerformed
+		* Watches/manages the buttons. Chooses what to do after a button is pressed depending on circumstances.
+	* main
+		* Creates and loops the authentication menu.
+	* startingMenu
+		* Creates the authentication menu. This gives the user the choice to login or create a new account. Returns 0 to login, 1 to create account and -1 to close the
+		window.
+	* login
+		* Creates the login menu. Returns true if successful and false if an error occured or if the user wants to cancel. Also displays error messages if there are
+		errors.
+	* 
