@@ -7,6 +7,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.lang.reflect.Field;
@@ -16,6 +17,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import static org.junit.Assert.fail;
 
@@ -3195,275 +3197,8 @@ public class RunLocalTest {
 
 
 
-        // Begin Server Testing
-        @Test(timeout = 1000)
-        public void serverClassDeclarationTest() {
-            Class<?> clazz;
-            String className;
-            int modifiers;
-            Class<?> superclass;
-            Class<?>[] superinterfaces;
-
-            // Set the class being tested
-            clazz = Server.class;
-            className = "Server";
-
-            // Testing
-
-            modifiers = clazz.getModifiers();
-            superclass = clazz.getSuperclass();
-            superinterfaces = clazz.getInterfaces();
-
-            Assert.assertTrue("Ensure that `"+ className +"` is `public`!", Modifier.isPublic(modifiers));
-            Assert.assertFalse("Ensure that `"+ className +"` is NOT `abstract`!", Modifier.isAbstract(modifiers));
-            Assert.assertEquals("Ensure that `"+ className +"` extends `Object`!", Object.class, superclass);
-            Assert.assertEquals("Ensure that `"+ className +"` implements only 0 interfaces!", 0, superinterfaces.length);
-        }
-
-        // End Server Testing
-
-
-
-        // Begin ServerThread Testing
-        @Test(timeout = 1000)
-        public void serverThreadClassDeclarationTest() {
-            Class<?> clazz;
-            String className;
-            int modifiers;
-            Class<?> superclass;
-            Class<?>[] superinterfaces;
-
-            // Set the class being tested
-            clazz = ServerThread.class;
-            className = "ServerThread";
-
-            // Testing
-
-            modifiers = clazz.getModifiers();
-            superclass = clazz.getSuperclass();
-            superinterfaces = clazz.getInterfaces();
-
-            Assert.assertTrue("Ensure that `"+ className +"` is `public`!", Modifier.isPublic(modifiers));
-            Assert.assertFalse("Ensure that `"+ className +"` is NOT `abstract`!", Modifier.isAbstract(modifiers));
-            Assert.assertEquals("Ensure that `"+ className +"` extends `Thread`!", Thread.class, superclass);
-            Assert.assertEquals("Ensure that `"+ className +"` implements only 0 interfaces!", 0, superinterfaces.length);
-        }
-
-        // Begin ServerThread Field Testing
-        @Test(timeout = 1000)
-        public void serverThreadSocketFieldTest() {
-            Class<?> clazz;
-            String className = "ServerThread";
-            Field testField;
-            int modifiers;
-            Class<?> type;
-
-            // Set the field that you want to test
-            String fieldName = "socket";
-
-            // Set the type of the field you want to test
-            // Use the type + .class
-            // For example, String.class or int.class
-            Class<?> expectedType = Socket.class;
-
-            // Set the class being tested
-            clazz = ServerThread.class;
-
-            // Attempt to access the class field
-            try {
-                testField = clazz.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException e) {
-                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
-
-                return;
-            } //end try catch
-
-            // Perform tests
-
-            modifiers = testField.getModifiers();
-
-            type = testField.getType();
-
-            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
-            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
-            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
-            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
-        }
-
-        @Test(timeout = 1000)
-        public void serverThreadManagerFieldTest() {
-            Class<?> clazz;
-            String className = "ServerThread";
-            Field testField;
-            int modifiers;
-            Class<?> type;
-
-            // Set the field that you want to test
-            String fieldName = "manager";
-
-            // Set the type of the field you want to test
-            // Use the type + .class
-            // For example, String.class or int.class
-            Class<?> expectedType = Manager.class;
-
-            // Set the class being tested
-            clazz = ServerThread.class;
-
-            // Attempt to access the class field
-            try {
-                testField = clazz.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException e) {
-                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
-
-                return;
-            } //end try catch
-
-            // Perform tests
-
-            modifiers = testField.getModifiers();
-
-            type = testField.getType();
-
-            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
-            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
-            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
-            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
-        }
-
-        @Test(timeout = 1000)
-        public void serverThreadReaderFieldTest() {
-            Class<?> clazz;
-            String className = "ServerThread";
-            Field testField;
-            int modifiers;
-            Class<?> type;
-
-            // Set the field that you want to test
-            String fieldName = "reader";
-
-            // Set the type of the field you want to test
-            // Use the type + .class
-            // For example, String.class or int.class
-            Class<?> expectedType = ObjectInputStream.class;
-
-            // Set the class being tested
-            clazz = ServerThread.class;
-
-            // Attempt to access the class field
-            try {
-                testField = clazz.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException e) {
-                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
-
-                return;
-            } //end try catch
-
-            // Perform tests
-
-            modifiers = testField.getModifiers();
-
-            type = testField.getType();
-
-            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
-            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
-            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
-            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
-        }
-
-        @Test(timeout = 1000)
-        public void serverThreadWriterFieldTest() {
-            Class<?> clazz;
-            String className = "ServerThread";
-            Field testField;
-            int modifiers;
-            Class<?> type;
-
-            // Set the field that you want to test
-            String fieldName = "writer";
-
-            // Set the type of the field you want to test
-            // Use the type + .class
-            // For example, String.class or int.class
-            Class<?> expectedType = ObjectOutputStream.class;
-
-            // Set the class being tested
-            clazz = ServerThread.class;
-
-            // Attempt to access the class field
-            try {
-                testField = clazz.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException e) {
-                Assert.fail("Ensure that `" + className + "` declares a field named `" + fieldName + "`!");
-
-                return;
-            } //end try catch
-
-            // Perform tests
-
-            modifiers = testField.getModifiers();
-
-            type = testField.getType();
-
-            Assert.assertTrue("Ensure that `" + className + "`'s `" + fieldName + "` field is `private`!", Modifier.isPrivate(modifiers));
-            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `final`!", Modifier.isFinal(modifiers));
-            Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
-            Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
-        }
-        // End ServerThread Field Testing
-
-        // Begin ServerThread Method Testing
-        @Test(timeout = 1000)
-        public void serverThreadRunMethodTest() {
-            Class<?> clazz;
-            String className = "ServerThread";
-            Method method;
-            int modifiers;
-            Class<?> actualReturnType;
-            int expectedLength = 0;
-            Class<?>[] exceptions;
-
-            // Set the method that you want to test
-            String methodName = "run";
-
-            // Set the return type of the method you want to test
-            // Use the type + .class
-            // For example, String.class or int.class
-            Class<?> expectedReturnType = void.class;
-
-            // Set the class being tested
-            clazz = ServerThread.class;
-
-            // Attempt to access the class method
-            try {
-                method = clazz.getDeclaredMethod(methodName);
-            } catch (NoSuchMethodException e) {
-                Assert.fail("Ensure that `" + className + "` declares a method named `" + methodName + "` that" +
-                        " has 0 parameters!");
-
-                return;
-            } //end try catch
-
-            // Perform tests
-
-            modifiers = method.getModifiers();
-
-            actualReturnType = method.getReturnType();
-
-            exceptions = method.getExceptionTypes();
-
-            Assert.assertTrue("Ensure that `" + className + "`'s `" + methodName + "` method is `public`!", Modifier.isPublic(modifiers));
-            Assert.assertFalse("Ensure that `" + className + "`'s `" + methodName + "` method is NOT `static`!", Modifier.isStatic(modifiers));
-            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
-            Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
-        }
-        
-
-        // End ServerThread Testing
-
-
-
         //Begin Client Testing
-        
+
         @Test(timeout = 1000)
         public void clientClassDeclarationTest() {
             Class<?> clazz;
@@ -3487,9 +3222,9 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `"+ className +"` extends `Object`!", Object.class, superclass);
             Assert.assertEquals("Ensure that `"+ className +"` implements no interfaces!", 0, superinterfaces.length);
         }
-        
+
         //Begin Client Field Testing
-        
+
         @Test(timeout = 1000)
         public void clientSocketFieldTest() {
             Class<?> clazz;
@@ -3527,7 +3262,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientWriterFieldTest() {
             Class<?> clazz;
@@ -3565,7 +3300,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientReaderFieldTest() {
             Class<?> clazz;
@@ -3603,7 +3338,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientServerHostFieldTest() {
             Class<?> clazz;
@@ -3642,7 +3377,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientServerPortFieldTest() {
             Class<?> clazz;
@@ -3681,7 +3416,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientCurrentUserFieldTest() {
             Class<?> clazz;
@@ -3720,7 +3455,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientTitleFontFieldTest() {
             Class<?> clazz;
@@ -3759,7 +3494,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientSubTitleFontFieldTest() {
             Class<?> clazz;
@@ -3798,7 +3533,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientPaddingFieldTest() {
             Class<?> clazz;
@@ -3837,7 +3572,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientPhoneNumberTxtFieldFieldTest() {
             Class<?> clazz;
@@ -3876,7 +3611,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientEmailTxtFieldFieldTest() {
             Class<?> clazz;
@@ -3915,7 +3650,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientBioTxtFieldFieldTest() {
             Class<?> clazz;
@@ -3954,7 +3689,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientInterestsTxtFieldFieldTest() {
             Class<?> clazz;
@@ -3993,7 +3728,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientNewUsernameTxtFieldFieldTest() {
             Class<?> clazz;
@@ -4032,7 +3767,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientOldPasswordTxtFieldFieldTest() {
             Class<?> clazz;
@@ -4071,7 +3806,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientNewPasswordTxtFieldFieldTest() {
             Class<?> clazz;
@@ -4110,7 +3845,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientSearchFieldFieldTest() {
             Class<?> clazz;
@@ -4149,7 +3884,7 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         @Test(timeout = 1000)
         public void clientActionListenerFieldTest() {
             Class<?> clazz;
@@ -4188,11 +3923,11 @@ public class RunLocalTest {
             Assert.assertFalse("Ensure that `" + className + "`'s `" + fieldName + "` field is NOT `static`!", Modifier.isStatic(modifiers));
             Assert.assertEquals("Ensure that `" + className + "`'s `" + fieldName + "` field is the correct type!", expectedType, type);
         }
-        
+
         //End Client Field Testing
-        
+
         //Begin Client Enum Testing
-        
+
         @Test(timeout = 1000)
         public void clientActionEnumTest() {
             Client.Action action = Client.Action.AcceptFriendRequest;
@@ -4232,11 +3967,11 @@ public class RunLocalTest {
             Assert.assertNotNull(action);
             Assert.assertEquals("Ensure that the Action enum has ViewSearchMenu", Client.Action.ViewSearchMenu, action);
         }
-        
+
         //End Client Enum Testing
-        
+
         //Begin Client Method Testing
-        
+
         @Test(timeout = 1000)
         public void clientRunMethodTest() {
             Class<?> clazz;
@@ -4281,7 +4016,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientStartingMenuMethodTest() {
             Class<?> clazz;
@@ -4326,7 +4061,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientLoginMethodTest() {
             Class<?> clazz;
@@ -4371,7 +4106,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientCreateAccountMethodTest() {
             Class<?> clazz;
@@ -4416,7 +4151,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientShowMainMenuMethodTest() {
             Class<?> clazz;
@@ -4461,7 +4196,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientShowProfileMethodTest() {
             Class<?> clazz;
@@ -4506,7 +4241,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientShowEditProfileMethodTest() {
             Class<?> clazz;
@@ -4551,7 +4286,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientShowFriendsListMethodTest() {
             Class<?> clazz;
@@ -4596,7 +4331,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientShowSearchMenuMethodTest() {
             Class<?> clazz;
@@ -4641,7 +4376,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientShowSearchResultsMethodTest() {
             Class<?> clazz;
@@ -4686,7 +4421,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientShowConnectionErrorMethodTest() {
             Class<?> clazz;
@@ -4731,7 +4466,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientSentToServerMethodTest() {
             Class<?> clazz;
@@ -4776,7 +4511,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         @Test(timeout = 1000)
         public void clientMainMethodTest() {
             Class<?> clazz;
@@ -4821,7 +4556,7 @@ public class RunLocalTest {
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has the correct return type!", expectedReturnType, actualReturnType);
             Assert.assertEquals("Ensure that `" + className + "`'s `" + methodName + "` method has an empty `throws` clause!", expectedLength, exceptions.length);
         }
-        
+
         //End Client Method Testing
     }
 }
