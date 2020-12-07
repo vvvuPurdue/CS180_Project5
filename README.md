@@ -1,10 +1,19 @@
-# CS180 Project5
-## Team 15-3
+# S.A.P.P: Social Account Profile Program
+## CS 180 Project 5: Option 2
 
-## How to run application
-Compile all Java classes: `javac */*.java`
+### Team 15-3
+- Christopher Chan
+- Brandon Lamer-Connolly
+- Amy Curtland
+- Parker Laughner
+- Vincent Vu
+
+### How to run application
+In terminal, compile all Java classes: `javac */*.java`
 
 To run server, `java backend/Server`. To run client, `java frontend/Client`
+
+### Backend Class Descriptions
 
 * **Account Class:**
 	* This class is called to hold information regarding any info in a user's account.
@@ -97,6 +106,9 @@ To run server, `java backend/Server`. To run client, `java frontend/Client`
 		* Sends a status update.
 	* sendData
 		* Is an overloaded method to sendData; sends data and a status update.
+
+## Frontend Class Descriptions
+
 * **JA Button Class:**
 	* Serves as an extension to the regular JButton and allows for assigning user accounts to a JButton.
 	* Testing done on this class is through JUnit tests in RunLocalTest.java.
