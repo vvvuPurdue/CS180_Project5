@@ -115,4 +115,11 @@
 	* login
 		* Creates the login menu. Returns true if successful and false if an error occured or if the user wants to cancel. Also displays error messages if there are
 		errors.
-	* 
+	* createAccount
+		* Creates the create account menu. Returns true if successful and false if an error occured or if the user wants to cancel. Also displays error messages if there
+		are errors.
+	* showMainMenu
+		* Creates the main menu. Using this menu, the user can access the friends list, the account profile and search for other accounts. Also keeps the menu updated in 
+		case account information was updated.
+	* showProfile
+		* 
