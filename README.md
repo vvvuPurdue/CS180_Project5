@@ -124,4 +124,7 @@
 	* showProfile
 		* Shows the user profile in a new window. If the person viewing the profile is the user, allows for the editing of account info. If the person view the
 		profile is another user then allows the person to view the friends list and to send a friend request to the profile they are viewing. Updates real time.
-	* 
+	* showEditProfile
+		* Shows the window that allows users to edit their own profile. Can display differently depending on the user's profile.
+	* showFriendsList
+		* 
