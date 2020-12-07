@@ -4,18 +4,18 @@ import java.io.*;
 import java.net.*;
 
 /**
-    * Server
-    *
-    * Handles the server creation, session creation,
-    * and requests, and authentication (through session threads)
-    * The "controller" of the whole backend system
-    *
-    * @author Team 15-3, CS 180 - Merge
-    * @version November 23, 2020
-*/
+ * Server
+ *
+ * Handles the server creation, session creation, and requests, and
+ * authentication (through session threads) The "controller" of the whole
+ * backend system
+ *
+ * @author Team 15-3, CS 180 - Merge
+ * @version November 23, 2020
+ */
 
 public class Server {
-    
+
     static ObjectInputStream reader;
     static PrintWriter writer;
     static ObjectOutputStream objectWriter;

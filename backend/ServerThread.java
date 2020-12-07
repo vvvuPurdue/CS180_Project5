@@ -5,14 +5,14 @@ import java.net.*;
 import java.util.ArrayList;
 
 /**
-    * ServerThread
-    *
-    * A server thread. Handles requests, and authentication
-    * Used to avoid overloading the server
-    * 
-    * @author Team 15-3, CS 180 - Merge
-    * @version November 23, 2020
-*/
+ * ServerThread
+ *
+ * A server thread. Handles requests, and authentication Used to avoid
+ * overloading the server
+ * 
+ * @author Team 15-3, CS 180 - Merge
+ * @version November 23, 2020
+ */
 
 public class ServerThread extends Thread {
 
@@ -98,7 +98,8 @@ public class ServerThread extends Thread {
                         break;
                     case ("deleteAccount"):
                         int deleteStatus = manager.deleteAccount(requestBody[1], requestBody[2]);
-                        sendData(deleteStatus == 1 ? "success" : (deleteStatus == -1 ? "incorrectPassword" : "usernameNotFound"));
+                        sendData(deleteStatus == 1 ? "success"
+                                : (deleteStatus == -1 ? "incorrectPassword" : "usernameNotFound"));
                         break;
                     case ("loginUser"):
                         String username = requestBody[1];
@@ -210,7 +211,7 @@ public class ServerThread extends Thread {
         }
     }
 
-    private void sendData(String status) throws IOException{
+    private void sendData(String status) throws IOException {
         writer.writeObject(new String[] { status });
         writer.flush();
     }

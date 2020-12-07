@@ -1,19 +1,20 @@
 package frontend;
 
 import javax.swing.*;
+
 /**
-    * JAButton
-    *
-    * Class that extends the JButton
-    * It has the additional ability to assign a user account to the JBUtton
-    * This is useful if certain buttons show certain profiles
-    * 
-    * @author Team 15-3 CS 180 - Merge
-    * @version November 26, 2020
-*/
+ * JAButton
+ *
+ * Class that extends the JButton It has the additional ability to assign a user
+ * account to the JBUtton This is useful if certain buttons show certain
+ * profiles
+ * 
+ * @author Team 15-3 CS 180 - Merge
+ * @version November 26, 2020
+ */
 
 public class JAButton extends JButton {
-    
+
     private String accountName;
     private Client.Action action;
 

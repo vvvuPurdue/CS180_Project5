@@ -11,14 +11,13 @@ import java.util.ArrayList;
 import backend.Account;
 
 /**
-    * Client class
-    *
-    * Manages logic of client, shows appropriate GUIs,
-    * and makes requests to server
-    *
-    * @author Team 15-3 CS 180 - Merge
-    * @version November 26, 2020
-*/
+ * Client class
+ *
+ * Manages logic of client, shows appropriate GUIs, and makes requests to server
+ *
+ * @author Team 15-3 CS 180 - Merge
+ * @version November 26, 2020
+ */
 
 public class Client {
 
@@ -58,17 +57,14 @@ public class Client {
 
     // defines ALL of the possible button actions
     public enum Action {
-        ViewProfile, ViewFriends,
-        EditAccount, UpdateAccount, DeleteAccount,
-        SendFriendRequest, CancelFriendRequest,
-        AcceptFriendRequest, DeclineFriendRequest,
-        RemoveFriend, ViewSearchMenu, SearchUsers
+        ViewProfile, ViewFriends, EditAccount, UpdateAccount, DeleteAccount, SendFriendRequest, CancelFriendRequest,
+        AcceptFriendRequest, DeclineFriendRequest, RemoveFriend, ViewSearchMenu, SearchUsers
     }
 
     /*
-        * There are several actions that we can perform after we listen
-        * The action depends on what the Action enum assigned to the JAButton
-    */
+     * There are several actions that we can perform after we listen The action
+     * depends on what the Action enum assigned to the JAButton
+     */
     public static ActionListener actionListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof JAButton) {
@@ -86,34 +82,31 @@ public class Client {
                     case ViewFriends -> {
                         showFriendsList(source.getAccountName());
                     }
-                    // if edit profile button was pressed, show profile window. Can only be shown for current user
+                    // if edit profile button was pressed, show profile window. Can only be shown
+                    // for current user
                     case EditAccount -> {
                         showEditProfile();
                     }
-                    // if saved changes button was pressed, send new info request to server. Can only be used for current user
+                    // if saved changes button was pressed, send new info request to server. Can
+                    // only be used for current user
                     case UpdateAccount -> {
                         Object[] response;
-                        // if old password, new password, and new username are blank, that means we're not updating them
+                        // if old password, new password, and new username are blank, that means we're
+                        // not updating them
                         // send request that only updates email, phoneNumber, bio, and interests
-                        if (oldPasswordTxtField.getText().equals("")
-                            && newPasswordTxtField.getText().equals("")
-                            && newUsernameTxtField.getText().equals("")
-                        ) {
-                            String[] request = new String[] {
-                                "updateAccount", currentUser.getUsername(),
-                                emailTxtField.getText(), phoneNumberTxtField.getText(),
-                                bioTxtField.getText(), interestsTxtField.getText()
-                            };
+                        if (oldPasswordTxtField.getText().equals("") && newPasswordTxtField.getText().equals("")
+                                && newUsernameTxtField.getText().equals("")) {
+                            String[] request = new String[] { "updateAccount", currentUser.getUsername(),
+                                    emailTxtField.getText(), phoneNumberTxtField.getText(), bioTxtField.getText(),
+                                    interestsTxtField.getText() };
                             response = sendToServer(request);
                         } else {
                             // else, if they are not blank, we are updating password and username
                             // send a request to include everything
-                            String[] request = new String[] {
-                                "updateAccount", currentUser.getUsername(),
-                                emailTxtField.getText(), phoneNumberTxtField.getText(),
-                                bioTxtField.getText(), interestsTxtField.getText(),
-                                oldPasswordTxtField.getText(), newUsernameTxtField.getText(), newPasswordTxtField.getText()
-                            };
+                            String[] request = new String[] { "updateAccount", currentUser.getUsername(),
+                                    emailTxtField.getText(), phoneNumberTxtField.getText(), bioTxtField.getText(),
+                                    interestsTxtField.getText(), oldPasswordTxtField.getText(),
+                                    newUsernameTxtField.getText(), newPasswordTxtField.getText() };
                             response = sendToServer(request);
                         }
                         // check status code to see if successful, and show appropriate messages
@@ -122,38 +115,50 @@ public class Client {
                             case "success":
                                 currentUser = (Account) response[1];
                                 // System.out.println(currentUser.getUsername());
-                                JOptionPane.showMessageDialog(null, "Changes have been successfully saved!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Changes have been successfully saved!", "Success",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                             case "usernameNotFound":
-                                JOptionPane.showMessageDialog(null, "Username could not be found!", "Error!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Username could not be found!", "Error!",
+                                        JOptionPane.ERROR_MESSAGE);
                                 break;
                             case "incorrectPassword":
-                                JOptionPane.showMessageDialog(null, "Password was not correct!", "Error!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Password was not correct!", "Error!",
+                                        JOptionPane.ERROR_MESSAGE);
                                 break;
                             case "usernameExists":
-                                JOptionPane.showMessageDialog(null, "Username already exists!", "Error!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Username already exists!", "Error!",
+                                        JOptionPane.ERROR_MESSAGE);
                                 break;
                             case "invalidUsername":
-                                JOptionPane.showMessageDialog(null, "Username is invalid!", "Error!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Username is invalid!", "Error!",
+                                        JOptionPane.ERROR_MESSAGE);
                                 break;
                             case "emptyFields":
-                                JOptionPane.showMessageDialog(null, "Account information cannot be empty!", "Error!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Account information cannot be empty!", "Error!",
+                                        JOptionPane.ERROR_MESSAGE);
                                 break;
                             case "connectionFailed":
                                 showConnectionError();
                                 break;
                         }
                     }
-                    // If user pressed delete account button, confirm if they want to delete. If so, proceed with operation
+                    // If user pressed delete account button, confirm if they want to delete. If so,
+                    // proceed with operation
                     // Can only be shown with current user
                     case DeleteAccount -> {
-                        int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete your account? This cannot be undone.", "Delete Account?", JOptionPane.YES_NO_OPTION);
+                        int confirm = JOptionPane.showConfirmDialog(null,
+                                "Are you sure you want to delete your account? This cannot be undone.",
+                                "Delete Account?", JOptionPane.YES_NO_OPTION);
                         if (confirm == JOptionPane.YES_OPTION) {
-                            String status = (String) sendToServer(new String[] { "deleteAccount", currentUser.getUsername(), currentUser.getPassword() })[0];
+                            String status = (String) sendToServer(new String[] { "deleteAccount",
+                                    currentUser.getUsername(), currentUser.getPassword() })[0];
                             switch (status) {
                                 case "success":
                                     deletingAccount = true;
-                                    JOptionPane.showMessageDialog(null, "Account successfully delete! Program will close now...", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.showMessageDialog(null,
+                                            "Account successfully delete! Program will close now...", "Success",
+                                            JOptionPane.INFORMATION_MESSAGE);
                                     System.exit(1);
                                     break;
                                 case "connectionFailed":
@@ -163,89 +168,109 @@ public class Client {
                         }
                     }
                     // If user pressed the friend request button, do a server request,
-                    // where we send a friend request from the current user to the account linked to the JAButton. 
+                    // where we send a friend request from the current user to the account linked to
+                    // the JAButton.
                     case SendFriendRequest -> {
-                        Object[] response = sendToServer(new String[] { "sendFriendRequest", currentUser.getUsername(), source.getAccountName() });
+                        Object[] response = sendToServer(new String[] { "sendFriendRequest", currentUser.getUsername(),
+                                source.getAccountName() });
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
                                 currentUser = (Account) response[1];
-                                JOptionPane.showMessageDialog(null, "Friend request sent!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Friend request sent!", "Success",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                             case "connectionFailed":
                                 showConnectionError();
                                 break;
                             default:
-                                JOptionPane.showMessageDialog(null, "Unable to send friend request", "Error", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Unable to send friend request", "Error",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                         }
                     }
                     // If user pressed the cancel friend request button, do a server request,
-                    // where we cancel a friend request sent from current user to the account linked to the JAButton.
+                    // where we cancel a friend request sent from current user to the account linked
+                    // to the JAButton.
                     case CancelFriendRequest -> {
-                        Object[] response = sendToServer(new String[] { "cancelFriendRequest", currentUser.getUsername(), source.getAccountName() });
+                        Object[] response = sendToServer(new String[] { "cancelFriendRequest",
+                                currentUser.getUsername(), source.getAccountName() });
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
                                 currentUser = (Account) response[1];
-                                JOptionPane.showMessageDialog(null, "Friend request canceled!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Friend request canceled!", "Success",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                             case "connectionFailed":
                                 showConnectionError();
                                 break;
                             default:
-                                JOptionPane.showMessageDialog(null, "Could not cancel friend request", "Error", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Could not cancel friend request", "Error",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                         }
                     }
-                    // If user pressed the accept friend request button, do a server request, and check status
+                    // If user pressed the accept friend request button, do a server request, and
+                    // check status
                     case AcceptFriendRequest -> {
-                        Object[] response = sendToServer(new String[] { "acceptFriendRequest", currentUser.getUsername(), source.getAccountName() });
+                        Object[] response = sendToServer(new String[] { "acceptFriendRequest",
+                                currentUser.getUsername(), source.getAccountName() });
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
                                 currentUser = (Account) response[1];
-                                JOptionPane.showMessageDialog(null, "Friend request accepted!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Friend request accepted!", "Success",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                             case "connectionFailed":
                                 showConnectionError();
                                 break;
                             default:
-                                JOptionPane.showMessageDialog(null, "Could not accept friend request", "Error", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Could not accept friend request", "Error",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                         }
                     }
-                    // If user pressed the decline friend request button, do a server request. Check status
+                    // If user pressed the decline friend request button, do a server request. Check
+                    // status
                     case DeclineFriendRequest -> {
-                        Object[] response = sendToServer(new String[] { "declineFriendRequest", currentUser.getUsername(), source.getAccountName() });
+                        Object[] response = sendToServer(new String[] { "declineFriendRequest",
+                                currentUser.getUsername(), source.getAccountName() });
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
                                 currentUser = (Account) response[1];
-                                JOptionPane.showMessageDialog(null, "Friend request declined!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Friend request declined!", "Success",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                             case "connectionFailed":
                                 showConnectionError();
                                 break;
                             default:
-                                JOptionPane.showMessageDialog(null, "Could not decline friend request", "Error", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Could not decline friend request", "Error",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                         }
                     }
-                    // If user pressed the remove friend request button, do a server request. Check status
+                    // If user pressed the remove friend request button, do a server request. Check
+                    // status
                     case RemoveFriend -> {
-                        Object[] response = sendToServer(new String[] { "removeFriend", currentUser.getUsername(), source.getAccountName() });
+                        Object[] response = sendToServer(
+                                new String[] { "removeFriend", currentUser.getUsername(), source.getAccountName() });
                         String status = (String) response[0];
                         switch (status) {
                             case "success":
                                 currentUser = (Account) response[1];
-                                JOptionPane.showMessageDialog(null, "Friend removed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Friend removed!", "Success",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                             case "connectionFailed":
                                 showConnectionError();
                                 break;
                             default:
-                                JOptionPane.showMessageDialog(null, "Could not remove friend request", "Error", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Could not remove friend request", "Error",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 break;
                         }
                     }
@@ -279,27 +304,30 @@ public class Client {
     }
 
     /*
-        First menu that shows when program is opened. Give user the choice to login or create account
-        Returns 0 to login, 1 to createAccount, -1 to close window
-    */
+     * First menu that shows when program is opened. Give user the choice to login
+     * or create account Returns 0 to login, 1 to createAccount, -1 to close window
+     */
     public static int startingMenu() {
         String[] options = { "Login", "Create New Account" };
-        int result = JOptionPane.showOptionDialog(null, "Welcome to the Friends App!", "Friends App", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        int result = JOptionPane.showOptionDialog(null, "Welcome to the Friends App!", "Friends App",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         return result;
     }
 
     /*
-        * Menu to allow user to login
-        * Return true if successful, false if error occurred or user wants to cancel
-        * If there are errors, show appropriate message dialogs
-    */
+     * Menu to allow user to login Return true if successful, false if error
+     * occurred or user wants to cancel If there are errors, show appropriate
+     * message dialogs
+     */
     public static boolean login() {
         String username = JOptionPane.showInputDialog(null, "Username", JOptionPane.QUESTION_MESSAGE);
         // if user clicked cancel, return to start menu
-        if (username == null) return false;
+        if (username == null)
+            return false;
         String password = JOptionPane.showInputDialog(null, "Password", JOptionPane.QUESTION_MESSAGE);
         // if user clicked cancel, return to start menu
-        if (password == null) return false;
+        if (password == null)
+            return false;
         Object[] response = sendToServer(new String[] { "loginUser", username, password });
         String status = (String) response[0];
         switch (status) {
@@ -307,7 +335,8 @@ public class Client {
                 currentUser = (Account) response[1];
                 return true;
             case "usernameNotFound":
-                JOptionPane.showMessageDialog(null, "Username does not exist", "User Error!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Username does not exist", "User Error!",
+                        JOptionPane.ERROR_MESSAGE);
                 break;
             case "incorrectPassword":
                 JOptionPane.showMessageDialog(null, "Incorrect Password", "Password Error!", JOptionPane.ERROR_MESSAGE);
@@ -319,39 +348,49 @@ public class Client {
         return false;
     }
 
-
     /*
-        * Menu to allow user to create a new account
-        * Return true if successful, false if error occurred or user wants to cancel
-        * If there are errors, show appropriate message dialogs
-    */
+     * Menu to allow user to create a new account Return true if successful, false
+     * if error occurred or user wants to cancel If there are errors, show
+     * appropriate message dialogs
+     */
     public static boolean createAccount() {
         String username = JOptionPane.showInputDialog(null, "Enter a username", JOptionPane.QUESTION_MESSAGE);
-        if (username == null) return false;
+        if (username == null)
+            return false;
         String password = JOptionPane.showInputDialog(null, "Enter a password", JOptionPane.QUESTION_MESSAGE);
-        if (password == null) return false;
+        if (password == null)
+            return false;
         String email = JOptionPane.showInputDialog(null, "Please enter your email", JOptionPane.QUESTION_MESSAGE);
-        if (email == null) return false;
-        String phone = JOptionPane.showInputDialog(null, "Please enter your phone number", JOptionPane.QUESTION_MESSAGE);
-        if (phone == null) return false;
+        if (email == null)
+            return false;
+        String phone = JOptionPane.showInputDialog(null, "Please enter your phone number",
+                JOptionPane.QUESTION_MESSAGE);
+        if (phone == null)
+            return false;
         String bio = JOptionPane.showInputDialog(null, "Please enter your bio", JOptionPane.QUESTION_MESSAGE);
-        if (bio == null) return false;
-        String interests = JOptionPane.showInputDialog(null, "Please enter some of your interests", JOptionPane.QUESTION_MESSAGE);
-        if (interests == null) return false;
+        if (bio == null)
+            return false;
+        String interests = JOptionPane.showInputDialog(null, "Please enter some of your interests",
+                JOptionPane.QUESTION_MESSAGE);
+        if (interests == null)
+            return false;
 
         String[] accountInfo = { "createAccount", username, password, email, phone, bio, interests };
         Object[] response = sendToServer(accountInfo);
         String status = (String) response[0];
         switch (status) {
             case "success":
-                JOptionPane.showMessageDialog(null, "Successfully created account", "Account Created!", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Successfully created account", "Account Created!",
+                        JOptionPane.INFORMATION_MESSAGE);
                 currentUser = (Account) response[1];
                 return true;
             case "usernameExists":
-                JOptionPane.showMessageDialog(null, "Username already exists", "User Error!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Username already exists", "User Error!",
+                        JOptionPane.ERROR_MESSAGE);
                 break;
             case "emptyFields":
-                JOptionPane.showMessageDialog(null, "You must fill every field to create an account", "User Error!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "You must fill every field to create an account", "User Error!",
+                        JOptionPane.ERROR_MESSAGE);
                 break;
             case "connectionFailed":
                 showConnectionError();
@@ -361,9 +400,9 @@ public class Client {
     }
 
     /*
-        * The main menu that the user will see once successfully logged in
-        * Can view friends list, view profile, search new people, and delete account
-    */
+     * The main menu that the user will see once successfully logged in Can view
+     * friends list, view profile, search new people, and delete account
+     */
     public static void showMainMenu() {
         // initial setup
         JFrame mainMenu = new JFrame();
@@ -376,7 +415,7 @@ public class Client {
         // create new buttons
         JAButton profileMenuButton = new JAButton("View Profile", currentUser.getUsername(), Action.ViewProfile);
         JAButton friendMenuButton = new JAButton("View Friends", currentUser.getUsername(), Action.ViewFriends);
-        JAButton searchMenuButton = new JAButton ("Search for Users", Action.ViewSearchMenu);
+        JAButton searchMenuButton = new JAButton("Search for Users", Action.ViewSearchMenu);
         profileMenuButton.addActionListener(actionListener);
         friendMenuButton.addActionListener(actionListener);
         searchMenuButton.addActionListener(actionListener);
@@ -396,7 +435,8 @@ public class Client {
         // continuosly keep this window updated (in case account info was updated)
         new Thread(() -> {
             while (mainMenu.isVisible() && !deletingAccount) {
-                // check to see if our current user was updated/edited, and update header and buttons
+                // check to see if our current user was updated/edited, and update header and
+                // buttons
                 Object[] response = sendToServer(new String[] { "getUser", currentUser.getUsername() });
                 String status = (String) response[0];
                 if (status.equals("success")) {
@@ -418,11 +458,10 @@ public class Client {
     }
 
     /*
-        * Shows a user's profile in a new window
-        * If this user is the currentUser, allow editProfile abilities
-        * Else, if it is a different user, allow the ability to view their friends request them
-        * Has real time updates (based on refresh rate)
-    */
+     * Shows a user's profile in a new window If this user is the currentUser, allow
+     * editProfile abilities Else, if it is a different user, allow the ability to
+     * view their friends request them Has real time updates (based on refresh rate)
+     */
     public static void showProfile(String username) {
         // initial setup, layout, and padding
         JFrame profileWindow = new JFrame();
@@ -454,7 +493,8 @@ public class Client {
         panel.add(interests);
         panel.add(Box.createVerticalStrut(10));
 
-        // instantiation of buttons (some may be shown, some not, depending on what user we are seeing)
+        // instantiation of buttons (some may be shown, some not, depending on what user
+        // we are seeing)
         JAButton editProfile = new JAButton("Edit Account", Action.EditAccount);
         JAButton deleteAccountButton = new JAButton("Delete Account", Action.DeleteAccount);
         JAButton viewFriends = new JAButton("View Friends", username, Action.ViewFriends);
@@ -464,10 +504,8 @@ public class Client {
         JAButton requestFriend = new JAButton("Send Friend Request", username, Action.SendFriendRequest);
         JAButton cancelRequest = new JAButton("Cancel Friend Request", username, Action.CancelFriendRequest);
         // we store all buttons in an array for ease later
-        JAButton[] buttons = new JAButton[] {
-            editProfile, deleteAccountButton, viewFriends,removeFriend,
-            acceptFriendRequest, declineFriendRequest, requestFriend, cancelRequest
-        };
+        JAButton[] buttons = new JAButton[] { editProfile, deleteAccountButton, viewFriends, removeFriend,
+                acceptFriendRequest, declineFriendRequest, requestFriend, cancelRequest };
         // hide them all, add action listner, and add to panel
         for (JAButton button : buttons) {
             button.setVisible(false);
@@ -499,11 +537,13 @@ public class Client {
                     phoneNumber.setText("Phone Number: " + user.getPhoneNumber());
                     bio.setText("Biography: " + user.getBio());
                     interests.setText("Interests: " + user.getInterests());
-                    // hide all buttons. Show only the neccessary ones, depending on what user we're seeing
+                    // hide all buttons. Show only the neccessary ones, depending on what user we're
+                    // seeing
                     for (JAButton button : buttons) {
                         button.setVisible(false);
                     }
-                    // if the user we are viewing is the current user, show edit/delete account features
+                    // if the user we are viewing is the current user, show edit/delete account
+                    // features
                     if (username.equals(currentUser.getUsername())) {
                         editProfile.setVisible(true);
                         deleteAccountButton.setVisible(true);
@@ -511,7 +551,8 @@ public class Client {
                         // if it is another user, allow the ability to view their friends
                         viewFriends.setVisible(true);
                         // then, check if we are friends with them
-                        Object[] isFriendsResponse = sendToServer( new String[] { "isFriendsWith", currentUser.getUsername(), username });
+                        Object[] isFriendsResponse = sendToServer(
+                                new String[] { "isFriendsWith", currentUser.getUsername(), username });
                         String isFriendsStatus = (String) isFriendsResponse[0];
                         if (isFriendsStatus.equals("success")) {
                             // if we are friends with them, add option to remove the friend
@@ -519,7 +560,8 @@ public class Client {
                                 removeFriend.setVisible(true);
                             } else {
                                 // if we're not friends with them, check if we have requested user
-                                Object[] hasRequestedResponse = sendToServer( new String[] { "hasRequested", currentUser.getUsername(), username });
+                                Object[] hasRequestedResponse = sendToServer(
+                                        new String[] { "hasRequested", currentUser.getUsername(), username });
                                 String hasRequestedStatus = (String) hasRequestedResponse[0];
                                 if (hasRequestedStatus.equals("success")) {
                                     // if we have friend requested them, give option to cancel the request
@@ -527,14 +569,15 @@ public class Client {
                                         cancelRequest.setVisible(true);
                                     } else {
                                         // if we have not requested them, check if they requested us
-                                        hasRequestedResponse = sendToServer(new String[] { "hasRequested", username, currentUser.getUsername() });
+                                        hasRequestedResponse = sendToServer(
+                                                new String[] { "hasRequested", username, currentUser.getUsername() });
                                         hasRequestedStatus = (String) hasRequestedResponse[0];
                                         if (hasRequestedStatus.equals("success")) {
                                             if ((boolean) hasRequestedResponse[1]) {
                                                 // if they have requested us, allow option to accept or decline request
                                                 acceptFriendRequest.setVisible(true);
                                                 declineFriendRequest.setVisible(true);
-                                            } else  {
+                                            } else {
                                                 // they have not requested us, we haven't requested them
                                                 // Allow option to send a friend request
                                                 requestFriend.setVisible(true);
@@ -556,8 +599,9 @@ public class Client {
                     }
                     profileWindow.pack();
                 } else if (status.equals("usernameNotFound")) {
-                    
-                    JOptionPane.showMessageDialog(null, "Username " + username + " could no longer be found!", "Error", JOptionPane.ERROR_MESSAGE);
+
+                    JOptionPane.showMessageDialog(null, "Username " + username + " could no longer be found!", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                     profileWindow.setVisible(false);
                 } else {
                     showConnectionError();
@@ -574,10 +618,10 @@ public class Client {
     }
 
     /*
-        * Shows the window to edit current user's profile
-        * Note: this only allows the user to edit ONLY their own profile
-        * unlike the other functions that can display for different users
-    */
+     * Shows the window to edit current user's profile Note: this only allows the
+     * user to edit ONLY their own profile unlike the other functions that can
+     * display for different users
+     */
     public static void showEditProfile() {
         JFrame editProfile = new JFrame();
         Container content = editProfile.getContentPane();
@@ -620,7 +664,8 @@ public class Client {
         content.add(interestsPanel);
         content.add(Box.createVerticalStrut(10));
 
-        JLabel header2 = new JLabel("If you are changing username or password, you must enter old password!", SwingConstants.CENTER);
+        JLabel header2 = new JLabel("If you are changing username or password, you must enter old password!",
+                SwingConstants.CENTER);
         content.add(header2);
         content.add(Box.createVerticalStrut(10));
 
@@ -663,10 +708,9 @@ public class Client {
     }
 
     /*
-        * Friends list window shows a list of the user's current friends,
-        * friend requests, and requested friends.
-        * Has realtime updates (based on refresh rate)
-    */
+     * Friends list window shows a list of the user's current friends, friend
+     * requests, and requested friends. Has realtime updates (based on refresh rate)
+     */
     public static void showFriendsList(String username) {
         JFrame friendsList = new JFrame();
         Container content = friendsList.getContentPane();
@@ -719,7 +763,8 @@ public class Client {
                     // add all friend profile buttons
                     if (user.getFriends().size() != 0) {
                         for (Account friend : user.getFriends()) {
-                            JAButton friendButton = new JAButton(friend.getUsername(), friend.getUsername(), Action.ViewProfile);
+                            JAButton friendButton = new JAButton(friend.getUsername(), friend.getUsername(),
+                                    Action.ViewProfile);
                             friendButton.addActionListener(actionListener);
                             currentFriendsPanel.add(friendButton, BorderLayout.CENTER);
                         }
@@ -733,7 +778,8 @@ public class Client {
 
                     friendRequestsPanel.setVisible(false);
                     requestedFriendsPanel.setVisible(false);
-                    // if we are viewing the current user, show their friend requests and requested friends
+                    // if we are viewing the current user, show their friend requests and requested
+                    // friends
                     if (user.getUsername().equals(currentUser.getUsername())) {
                         // set up friend requests panel
                         friendRequestsPanel.setVisible(true);
@@ -745,7 +791,8 @@ public class Client {
                         // displaying all friend requests
                         if (user.getFriendRequests().size() != 0) {
                             for (Account friendRequest : user.getFriendRequests()) {
-                                JAButton friendButton = new JAButton(friendRequest.getUsername(), friendRequest.getUsername(), Action.ViewProfile);
+                                JAButton friendButton = new JAButton(friendRequest.getUsername(),
+                                        friendRequest.getUsername(), Action.ViewProfile);
                                 friendButton.addActionListener(actionListener);
                                 friendRequestsPanel.add(friendButton, BorderLayout.CENTER);
                             }
@@ -766,7 +813,8 @@ public class Client {
                         // displaying all requested friends
                         if (user.getRequestedFriends().size() != 0) {
                             for (Account requestedFriend : user.getRequestedFriends()) {
-                                JAButton friendButton = new JAButton(requestedFriend.getUsername(), requestedFriend.getUsername(), Action.ViewProfile);
+                                JAButton friendButton = new JAButton(requestedFriend.getUsername(),
+                                        requestedFriend.getUsername(), Action.ViewProfile);
                                 friendButton.addActionListener(actionListener);
                                 requestedFriendsPanel.add(friendButton, BorderLayout.CENTER);
                             }
@@ -779,7 +827,8 @@ public class Client {
                     }
                     friendsList.pack();
                 } else if (status.equals("usernameNotFound")) {
-                    JOptionPane.showMessageDialog(null, "Username " + username + " could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Username " + username + " could not be found!", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                     friendsList.setVisible(false);
                 } else {
                     showConnectionError();
@@ -794,10 +843,10 @@ public class Client {
             }
         }).start();
     }
-    
+
     /*
-        Window to show the search bar and search button, but NOT the search results
-    */
+     * Window to show the search bar and search button, but NOT the search results
+     */
     public static void showSearchMenu() {
         // initial setup, layout, and padding
         JFrame searchMenu = new JFrame();
@@ -837,9 +886,9 @@ public class Client {
     }
 
     /*
-        * Window to show the search results (comes after user has pressed the search button)
-        * Has real time updates (based on refresh rate)
-    */
+     * Window to show the search results (comes after user has pressed the search
+     * button) Has real time updates (based on refresh rate)
+     */
     public static void showSearchResults(String searchWord) {
         // setting up the window, layout, and padding
         JFrame resultsWindow = new JFrame();
@@ -877,12 +926,14 @@ public class Client {
                     if (users.size() > 0) {
                         // display all users
                         for (Account user : users) {
-                            JAButton userButton = new JAButton(user.getUsername(), user.getUsername(), Action.ViewProfile);
+                            JAButton userButton = new JAButton(user.getUsername(), user.getUsername(),
+                                    Action.ViewProfile);
                             userButton.addActionListener(actionListener);
                             resultsPanel.add(userButton);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "No users found!", "Search Results", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "No users found!", "Search Results",
+                                JOptionPane.INFORMATION_MESSAGE);
                         resultsWindow.setVisible(false);
                     }
                     resultsPanel.revalidate();
@@ -904,7 +955,8 @@ public class Client {
 
     // shown whenever we are unable to connect to the server
     public static void showConnectionError() {
-        JOptionPane.showMessageDialog(null, "Could not connect to server. Please try again later!", "Connection Error!", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Could not connect to server. Please try again later!", "Connection Error!",
+                JOptionPane.ERROR_MESSAGE);
     }
 
     // try to send data. If connection failed, return connectionFailed status code

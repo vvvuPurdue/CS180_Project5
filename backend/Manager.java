@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.io.*;
 
 /**
-    * Manager
-    *
-    * Acts as a "database", storing all accounts
-    * and manages retrieval of specific accounts
-    * The "model" of the entire system
-    *
-    * @author Team 15-3, CS 180 - Merge
-    * @version December 2nd, 2020
-*/
+ * Manager
+ *
+ * Acts as a "database", storing all accounts and manages retrieval of specific
+ * accounts The "model" of the entire system
+ *
+ * @author Team 15-3, CS 180 - Merge
+ * @version December 2nd, 2020
+ */
 
 public class Manager {
 
@@ -36,7 +35,9 @@ public class Manager {
     }
 
     // getter method for all users
-    public ArrayList<Account> getAllUsers() { return allUsers; }
+    public ArrayList<Account> getAllUsers() {
+        return allUsers;
+    }
 
     // getter method for a specific user
     public Account getUser(String username) {
@@ -50,11 +51,14 @@ public class Manager {
     // creates a new account given info and adds it to our list/database
     // avoid duplicates of usernames and invalid username creation
     // return 1 if successful, -1 if invalid username, -2 if duplicate username
-    public int createAccount (String username, String password, String email, String phoneNumber, String bio, String interests) {
-        // check to make sure that username doesn't already exist in the list/database already
+    public int createAccount(String username, String password, String email, String phoneNumber, String bio,
+            String interests) {
+        // check to make sure that username doesn't already exist in the list/database
+        // already
         int i = findUser(username);
         if (i == -1) {
-            if (username.contains(" ")) return -1;
+            if (username.contains(" "))
+                return -1;
             Account newUser = new Account(username, password, email, phoneNumber, bio, interests);
             allUsers.add(newUser);
             return 1;
@@ -63,7 +67,7 @@ public class Manager {
     }
 
     // 1 if success, -1 if username could not be found
-    public int updateAccount (String username, String email, String phoneNumber, String bio, String interests) {
+    public int updateAccount(String username, String email, String phoneNumber, String bio, String interests) {
         int i = findUser(username);
         if (i != -1) {
             Account user = allUsers.get(i);
@@ -78,7 +82,8 @@ public class Manager {
 
     // -1 if invalid username, -2 if new username exists
     // -3 if password is incorrect, -4 if username could not be found
-    public int updateAccount(String username, String email, String phoneNumber, String bio, String interests, String currentPassword, String newUsername, String newPassword) {
+    public int updateAccount(String username, String email, String phoneNumber, String bio, String interests,
+            String currentPassword, String newUsername, String newPassword) {
         int i = findUser(username);
         if (i != -1) {
             if (newUsername.contains(" ")) {
@@ -102,9 +107,10 @@ public class Manager {
     // removes user from our list/database
     // 1 if success, -1 if password incorrect, -2 if username not found
     public int deleteAccount(String username, String password) {
-        // check to make sure that user exists in our list/database, and password is correct
+        // check to make sure that user exists in our list/database, and password is
+        // correct
         int i = findUser(username);
-        if (i != -1 ) {
+        if (i != -1) {
             if (allUsers.get(i).getPassword().equals(password)) {
                 // remove this account from all friend lists
                 for (int x = allUsers.get(i).getFriends().size() - 1; x >= 0; x--) {

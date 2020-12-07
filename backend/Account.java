@@ -4,18 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
-    * Account class
-    *
-    * Holds info about a user account/profile
-    * Username, password, interests/bio, contact
-    * and a list of current friends and friend requests
-    *
-    * @author Team 15-3, CS 180 - Merge
-    * @version November 23, 2020
-*/
+ * Account class
+ *
+ * Holds info about a user account/profile Username, password, interests/bio,
+ * contact and a list of current friends and friend requests
+ *
+ * @author Team 15-3, CS 180 - Merge
+ * @version November 23, 2020
+ */
 
 public class Account implements Serializable {
-    
+
     // account info
     private String username;
     private String password;
@@ -46,25 +45,67 @@ public class Account implements Serializable {
     }
 
     // getters and setters for account info
-    public String getUsername() { return username; }
-    public String getPassword() { return password; }
-    public void setUsername(String username) { this.username = username; }
-    public void setPassword(String password) { this.password = password; }
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     // getters and setters for profile info
-    public String getEmail() { return email; }
-    public String getPhoneNumber() { return phoneNumber; }
-    public String getBio() { return bio; }
-    public String getInterests() { return interests; }
-    public void setEmail(String email) { this.email = email; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-    public void setBio(String bio) { this.bio = bio; }
-    public void setInterests(String interests) { this.interests = interests; }
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public String getInterests() {
+        return interests;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public void setInterests(String interests) {
+        this.interests = interests;
+    }
 
     // getters for friend requests
-    public ArrayList<Account> getFriends() { return friends; }
-    public ArrayList<Account> getFriendRequests() { return friendRequests; }
-    public ArrayList<Account> getRequestedFriends() { return requestedFriends; }
+    public ArrayList<Account> getFriends() {
+        return friends;
+    }
+
+    public ArrayList<Account> getFriendRequests() {
+        return friendRequests;
+    }
+
+    public ArrayList<Account> getRequestedFriends() {
+        return requestedFriends;
+    }
 
     // checks whether or not a user is friends with this user
     public boolean isFriendsWith(Account user) {
@@ -111,7 +152,8 @@ public class Account implements Serializable {
         int i = userInList(user.username, this.friendRequests);
         int j = userInList(this.username, user.requestedFriends);
         if (i != -1 && j != -1) {
-            // if this user is accepting friend request, add the users and remove from request lists
+            // if this user is accepting friend request, add the users and remove from
+            // request lists
             // else, if this user is declining, only remove from friend requests lists
             if (accepting) {
                 this.friends.add(user);
