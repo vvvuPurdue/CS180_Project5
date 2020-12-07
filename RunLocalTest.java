@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import backend.*;
 import frontend.*;
 
