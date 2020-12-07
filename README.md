@@ -115,16 +115,16 @@ To run server, `java backend/Server`. To run client, `java frontend/Client`
 	* main
 		* Creates and loops the authentication menu.
 	* startingMenu
-		* Creates the authentication menu. This gives the user the choice to login or create a new account. Returns 0 to login, 1 to create account and -1 to close the
+		* Opens the authentication menu. This gives the user the choice to login or create a new account. Returns 0 to login, 1 to create account and -1 to close the
 		window.
 	* login
-		* Creates the login menu. Returns true if successful and false if an error occured or if the user wants to cancel. Also displays error messages if there are
+		* Shows the login menu. Returns true if successful and false if an error occured or if the user wants to cancel. Also displays error messages if there are
 		errors.
 	* createAccount
-		* Creates the create account menu. Returns true if successful and false if an error occured or if the user wants to cancel. Also displays error messages if there
+		* Shows the create account menu. Returns true if successful and false if an error occured or if the user wants to cancel. Also displays error messages if there
 		are errors.
 	* showMainMenu
-		* Creates the main menu. Using this menu, the user can access the friends list, the account profile and search for other accounts. Also keeps the menu updated in 
+		* Shows the main menu. Using this menu, the user can access the friends list, the account profile and search for other accounts. Also keeps the menu updated in 
 		case account information was updated.
 	* showProfile
 		* Shows the user profile in a new window. If the person viewing the profile is the user, allows for the editing of account info. If the person view the
@@ -132,4 +132,12 @@ To run server, `java backend/Server`. To run client, `java frontend/Client`
 	* showEditProfile
 		* Shows the window that allows users to edit their own profile. Can display differently depending on the user's profile.
 	* showFriendsList
-		* 
+		* Shows the window that has a list of the user's current friends, friend requests and sent friend requests. Upadates real time.
+	* showSearchMenu
+		* Shows the window that has a search bar and search button. Does not show search results.
+	* showSearchResults
+		* Shows window that has the search results (after user presses search button). Updates real time.
+	* showConnectionError
+		* Shows message that client was unable to connect to the server.
+	* sendToServer
+		* Sends data to the server. Shows connection failed if unable to connect.
