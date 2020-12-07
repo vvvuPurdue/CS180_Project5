@@ -107,7 +107,7 @@ To run server, `java backend/Server`. To run client, `java frontend/Client`
 	* sendData
 		* Is an overloaded method to sendData; sends data and a status update.
 
-## Frontend Class Descriptions
+### Frontend Class Descriptions
 
 * **JA Button Class:**
 	* Serves as an extension to the regular JButton and allows for assigning user accounts to a JButton.
