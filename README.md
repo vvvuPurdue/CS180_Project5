@@ -133,6 +133,13 @@ To run server, `java backend/Server`. To run client, `java frontend/Client`
 	* Testing done on this class is through JUnit tests in RunLocalTest.java. GUI testing included just entering correct inputs to see if inputs inputted correctly would
 		* JUnit tests check that all methods and fields are declared properly, then attempt to call a method with both valid and invalid parameters when applicable for funcitonality
 		* GUI testing was done by attempting to enter valid and invalid information into fields to ensure proper functionality of the Client, as well as attempting to use every possible reachable part of the GUI (all buttons in GUI, all open fields, closing each GUI) to ensure that overall functionality was as desired.
+		* Some errors that will be thrown and caught include:
+			* Invalid username, if you enter a username that already exists or a blank field when creating account
+			* Empty fields, if you try and create an account with empty fields
+			* Connection failed, if the server is down while client is trying to connect
+			* Incorrect password, if you enter a password that doesn't correlate with username
+			* User can not be found, if the user you are currently viewing the profile of no longer exists
+			* Could not send/remove/cancel/accept friend request, if the user could not be found
 	work. Then incorrect inputs are put in to get the error messages to display to make sure error messages are displayed in the correct situations.
 	* actionPerformed
 		* Watches/manages the buttons. Chooses what to do after a button is pressed depending on circumstances.
