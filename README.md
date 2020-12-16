@@ -1,14 +1,16 @@
 # S.A.P.P: Social Account Profile Program
 ## CS 180 Project 5: Option 2
 
+A social networking program that allows users to create lists of friends
+
+This capstone project was made for Purdue University class CS18000 - Problem Solving and OOP.
+
 ### Team 15-3
 - Christopher Chan
 - Brandon Lamer-Connolly
 - Amy Curtland
 - Parker Laughner
 - Vincent Vu
-
-This capstone project was made for Purdue University class CS18000 - Problem Solving and OOP. The purpose of this project assignment was to demonstrate our foundational knowledge in Java programming, server creation and handling, multithreading, and GUI creation. It also tested our ability to collaborate and communicate professionally with assigned teammates.
 
 -----------------------
 
